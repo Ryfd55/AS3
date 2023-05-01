@@ -2,4 +2,7 @@
 <resources>
     <string name="app_name">нмедиа</string>
     <string name="center_word">НМедиа!</string>
+    <string name="likesCount">59</string>
+    <string name="shareCount">5</string>
+    <string name="viewsCount">12,4K</string>
 </resources>
