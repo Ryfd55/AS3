@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">nmedia</string>
     <string name="center_word">NMedia!</string>
+    <string name="likesCount">59</string>
+    <string name="shareCount">5</string>
+    <string name="viewsCount">12,4K</string>
 </resources>
