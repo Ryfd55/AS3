@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 //                likes?.setImageResource(R.drawable.likes_red)
 //            }
             likesCount.text = post.likes.toString()
-            sharesCount.text = shortening(post.sharesCount)
+            sharesCount.text = Shortening.shortening(post.sharesCount)
 
 
             likes?.setOnClickListener {
@@ -35,31 +35,13 @@ class MainActivity : AppCompatActivity() {
                     if (post.likedByMe) R.drawable.likes_red else R.drawable.likes_border
                 )
                 if (post.likedByMe) post.likes++ else post.likes--
-                likesCount.text = shortening(post.likes)
+                likesCount.text = Shortening.shortening(post.likes)
             }
 
             shares?.setOnClickListener {
                 post.sharesCount++
-                sharesCount.text = shortening(post.sharesCount)
+                sharesCount.text = Shortening.shortening(post.sharesCount)
             }
         }
-    }
-
-    fun shortening(number:Long): String{
-        val shortNum = when (number.toString().length){
-            in 1..3 -> number.toString()
-            in 4..6 ->  ((number.toInt()/100).toDouble()/10).toString().dropLastWhile{
-                it == '0'
-            }.dropLastWhile{
-                it == '.'
-            }+"K"
-            in 7..9 ->  ((number.toInt()/100000).toDouble()/10).toString().dropLastWhile{
-                it == '0'
-            }.dropLastWhile{
-                it == '.'
-            }+"M"
-            else -> "> 1B"
-        }
-        return shortNum
     }
 }
