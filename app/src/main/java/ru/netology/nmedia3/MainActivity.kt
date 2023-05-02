@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun shortening(number:Long): String{
-        var shortNum = when (number.toString().length){
+        val shortNum = when (number.toString().length){
             in 1..3 -> number.toString()
             in 4..6 ->  ((number.toInt()/100).toDouble()/10).toString().dropLastWhile{
                 it == '0'

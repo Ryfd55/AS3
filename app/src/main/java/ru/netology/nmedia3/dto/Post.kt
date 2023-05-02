@@ -7,6 +7,6 @@ data class Post(
     val content: String,
     var likedByMe: Boolean = true,
     var likes: Long = 999,
-    var sharesCount: Long = 999998
+    var sharesCount: Long = 1100
 )
 
