@@ -38,5 +38,5 @@
 ## 2.3. Отображение списков: RecyclerView»
 
 Добавьте в свой проект реализацию отображения списков на базе RecyclerView и ListAdapter.
-В примерах на лекции у нас был только OnLikeListener. Сделайте также OnShareListener.
+В примерах на лекции у нас был только OnLikeListener. Сделайте также OnShareListener...
 
