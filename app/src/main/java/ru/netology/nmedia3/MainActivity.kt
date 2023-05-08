@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
             onShareClicked = { viewModel.shareById(it.id) }
         )
         viewModel.data.observe(this) { posts ->
-            adapter.data = posts
+            adapter.submitList(posts)
         }
         activityMainBinding.list.adapter = adapter
 
