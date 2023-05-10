@@ -1,5 +1,6 @@
 package ru.netology.nmedia3.adapter
 
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import ru.netology.nmedia3.R
 import ru.netology.nmedia3.Shortening
@@ -9,7 +10,8 @@ import ru.netology.nmedia3.dto.Post
 class PostViewHolder(
     private val binding: CardPostBinding,
     private val onLikeClicked: (Post) -> Unit,
-    private val onShareClicked: (Post) -> Unit
+    private val onShareClicked: (Post) -> Unit,
+    private val onRemoveClickedListener: (Post) -> Unit
 
 ) : ViewHolder(binding.root) {
     fun bind(post: Post) {
@@ -26,6 +28,21 @@ class PostViewHolder(
             }
             shares.setOnClickListener {
                 onShareClicked(post)
+            }
+            menu.setOnClickListener {
+                PopupMenu(it.context, it).apply {
+                    inflate(R.menu.post_options)
+                    setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.remove -> {
+                                onRemoveClickedListener(post)
+                                true
+                            }
+                            else -> false
+                        }
+                        false
+                    }
+                }.show()
             }
 
 

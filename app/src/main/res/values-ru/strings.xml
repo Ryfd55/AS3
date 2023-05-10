@@ -4,4 +4,6 @@
     <string name="center_word">НМедиа!</string>
     <string name="shareCount">5</string>
     <string name="viewsCount">12,4K</string>
+    <string name="content_hint">Content</string>
+    <string name="empty_post_error">Content must not be empty</string>
 </resources>
