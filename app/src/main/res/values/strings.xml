@@ -3,4 +3,8 @@
     <string name="center_word">NMedia!</string>
     <string name="shareCount">5</string>
     <string name="viewsCount">12,4K</string>
+    <string name="remove">Remove</string>
+    <string name="content_hint">Content</string>
+    <string name="empty_post_error">Content must not be empty</string>
+    <string name="edit">Edit</string>
 </resources>
