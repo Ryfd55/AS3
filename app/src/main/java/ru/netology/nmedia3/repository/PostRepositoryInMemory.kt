@@ -63,6 +63,7 @@ class PostRepositoryInMemory : PostRepository {
         }
         data.value = posts
     }
+
     override fun shareById(id: Long) {
         posts = posts.map { post ->
             if (post.id == id) {
@@ -84,9 +85,28 @@ class PostRepositoryInMemory : PostRepository {
     }
 
     override fun save(post: Post) {
-        posts = listOf(post.copy(id = ++nextId)) + posts
+        if (post.id == 0L) {
+            posts = listOf(
+                post.copy(
+                    id = ++nextId,
+                    published = "Now",
+                    author = "Me"
+                )
+            ) + posts
+            data.value = posts
+            return
+        }
+
+        posts = posts.map {
+            if (it.id != post.id)
+                it
+            else
+                it.copy(content = post.content)
+        }
         data.value = posts
-        return
     }
 
+//    override fun edit(post: Post) {
+//        TODO("Not yet implemented")
+//    }
 }

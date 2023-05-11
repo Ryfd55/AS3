@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import ru.netology.nmedia3.adapter.PostAdapter
+import ru.netology.nmedia3.adapter.PostListener
 import ru.netology.nmedia3.databinding.ActivityMainBinding
 import ru.netology.nmedia3.databinding.CardPostBinding
 import ru.netology.nmedia3.dto.Post
@@ -19,12 +20,34 @@ class MainActivity : AppCompatActivity() {
 
         val viewModel: PostViewModel by viewModels()
         val adapter = PostAdapter(
-            onLikeClicked = { viewModel.likeById(it.id) },
-            onShareClicked = { viewModel.shareById(it.id) },
-            onRemoveClickedListener = {
-                viewModel.removeById(it.id)
+            object : PostListener {
+                override fun onRemove(post: Post) {
+                    viewModel.removeById(post.id)
+                }
+
+                override fun onEdit(post: Post) {
+                    viewModel.edit(post)
+                }
+
+                override fun onLike(post: Post) {
+                    viewModel.likeById(post.id)
+                }
+
+                override fun onLShare(post: Post) {
+                    viewModel.shareById(post.id)
+                }
             }
         )
+
+        viewModel.edited.observe(this) {
+            if (it.id ==0L) {
+                return@observe
+            }
+
+            activityMainBinding.content.requestFocus()
+            activityMainBinding.content.setText(it.content)
+        }
+
         activityMainBinding.save.setOnClickListener {
             with(activityMainBinding.content) {
                 val content = text.toString()

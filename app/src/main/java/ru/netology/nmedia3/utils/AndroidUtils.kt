@@ -10,9 +10,4 @@ object AndroidUtils {
             view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken,0)
     }
-    fun rwr(): Int{
-        34+43
-        return 2
-    }
-
 }

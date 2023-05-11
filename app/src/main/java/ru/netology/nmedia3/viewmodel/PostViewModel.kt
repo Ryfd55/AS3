@@ -28,9 +28,17 @@ class PostViewModel : ViewModel() {
         edited.value?.let {
             repository.save(it)
         }
-edited.value = empty
+
+        fun edit(post: Post) {
+            edited.value = post
+        }
+
+        edited.value = empty
     }
 
+    fun edit(post: Post) {
+        edited.value = post
+    }
     fun changeContent(content: String) {
         edited.value?.let { post ->
             if (content != post.content) {
