@@ -8,7 +8,6 @@ import ru.netology.nmedia3.databinding.CardPostBinding
 import ru.netology.nmedia3.dto.Post
 
 
-
 class PostViewHolder(
     private val binding: CardPostBinding,
 //    private val onLikeClicked: (Post) -> Unit,
@@ -17,7 +16,6 @@ class PostViewHolder(
 
 
     private val listener: PostListener
-
 
 
 ) : ViewHolder(binding.root) {
@@ -46,10 +44,12 @@ class PostViewHolder(
 //                                onRemoveClickedListener(post)
                                 true
                             }
-                            R.id.edit ->{
+
+                            R.id.edit -> {
                                 listener.onEdit(post)
                                 true
                             }
+
                             else -> false
                         }
                         false

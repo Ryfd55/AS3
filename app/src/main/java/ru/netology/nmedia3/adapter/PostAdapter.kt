@@ -16,9 +16,6 @@ interface PostListener {
 }
 
 class PostAdapter(
-//    private val onLikeClicked: (Post) -> Unit,
-//    private val onShareClicked: (Post) -> Unit,
-//    private val onRemoveClickedListener: (Post) -> Unit,
     private val listener: PostListener
 
 
@@ -30,7 +27,6 @@ class PostAdapter(
 
         return PostViewHolder(
             binding = binding,
-//            onLikeClicked, onShareClicked, onRemoveClickedListener)
             listener = this.listener
         )
     }

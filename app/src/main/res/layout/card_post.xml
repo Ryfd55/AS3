@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:padding="@dimen/common_spacing"
     tools:context=".MainActivity">
 
@@ -59,63 +60,63 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingVertical="@dimen/common_spacing"
-        app:layout_constraintTop_toBottomOf="@id/barrierOverContent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrierOverContent"
         tools:text="@sample/posts.json/data/content" />
 
     <ImageButton
         android:id="@+id/likes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/likes_border"
         android:background="@android:color/transparent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/content"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:srcCompat="@drawable/likes_border" />
 
     <TextView
         android:id="@+id/likesCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="100"
+        android:layout_marginStart="@dimen/half_spacing"
         android:textColor="#9A9898"
         android:textStyle="bold"
-        android:layout_marginStart="@dimen/half_spacing"
+        app:layout_constraintBottom_toBottomOf="@id/likes"
         app:layout_constraintStart_toEndOf="@id/likes"
         app:layout_constraintTop_toTopOf="@id/likes"
-        app:layout_constraintBottom_toBottomOf="@id/likes"/>
+        tools:text="100" />
 
     <ImageButton
         android:id="@+id/shares"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/shares"
-        android:background="@android:color/transparent"
         android:layout_marginStart="@dimen/double_spacing"
+        android:background="@android:color/transparent"
+        app:layout_constraintStart_toEndOf="@id/likesCount"
         app:layout_constraintTop_toBottomOf="@id/content"
-        app:layout_constraintStart_toEndOf="@id/likesCount"/>
+        app:srcCompat="@drawable/shares" />
 
     <TextView
         android:id="@+id/sharesCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/half_spacing"
         android:text="@string/shareCount"
         android:textColor="#9A9898"
         android:textStyle="bold"
-        android:layout_marginStart="@dimen/half_spacing"
+        app:layout_constraintBottom_toBottomOf="@id/shares"
         app:layout_constraintStart_toEndOf="@id/shares"
-        app:layout_constraintTop_toTopOf="@id/shares"
-        app:layout_constraintBottom_toBottomOf="@id/shares" />
+        app:layout_constraintTop_toTopOf="@id/shares" />
 
     <ImageButton
         android:id="@+id/views"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/views"
-        android:background="@android:color/transparent"
         android:layout_marginEnd="@dimen/half_spacing"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toStartOf="@id/viewsCount"
         app:layout_constraintTop_toBottomOf="@id/content"
-        app:layout_constraintEnd_toStartOf="@id/viewsCount"/>
+        app:srcCompat="@drawable/views" />
 
     <TextView
         android:id="@+id/viewsCount"
@@ -124,9 +125,9 @@
         android:text="@string/viewsCount"
         android:textColor="#9A9898"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="@id/views"
         app:layout_constraintBottom_toBottomOf="@id/views"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/views" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package ru.netology.nmedia3
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import ru.netology.nmedia3.adapter.PostAdapter
@@ -38,14 +39,15 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         )
-
         viewModel.edited.observe(this) {
-            if (it.id ==0L) {
+            if (it.id == 0L) {
                 return@observe
             }
 
             activityMainBinding.content.requestFocus()
             activityMainBinding.content.setText(it.content)
+            activityMainBinding.textForEdit.setText(it.content)
+            activityMainBinding.group.visibility = View.VISIBLE
         }
 
         activityMainBinding.save.setOnClickListener {
@@ -62,12 +64,21 @@ class MainActivity : AppCompatActivity() {
                 viewModel.changeContent(content)
                 viewModel.save()
 
+                activityMainBinding.group.visibility = View.GONE
                 setText("")
                 clearFocus()
                 AndroidUtils.hideKeyboard(this)
             }
         }
 
+        activityMainBinding.cancel.setOnClickListener {
+            with(activityMainBinding.content) {
+                activityMainBinding.group.visibility = View.GONE
+                setText("")
+                clearFocus()
+                AndroidUtils.hideKeyboard(this)
+            }
+        }
         viewModel.data.observe(this) { posts ->
             adapter.submitList(posts)
         }
