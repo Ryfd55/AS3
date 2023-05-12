@@ -10,4 +10,7 @@
     <string name="edit">Изменить</string>
     <string name="editing">Редактирование сообщения</string>
     <string name="save">сохранить</string>
+    <string name="content">контент</string>
+    <string name="cancel">отмена</string>
+    <string name="emoji">эмоджи</string>
 </resources>

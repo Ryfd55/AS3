@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.view.marginBottom
 import ru.netology.nmedia3.adapter.PostAdapter
 import ru.netology.nmedia3.adapter.PostListener
 import ru.netology.nmedia3.databinding.ActivityMainBinding
@@ -43,11 +44,12 @@ class MainActivity : AppCompatActivity() {
             if (it.id == 0L) {
                 return@observe
             }
-
             activityMainBinding.content.requestFocus()
             activityMainBinding.content.setText(it.content)
             activityMainBinding.textForEdit.setText(it.content)
             activityMainBinding.group.visibility = View.VISIBLE
+//            activityMainBinding.content.marginBottom = View (R.dimen.half_spacing)
+//            android:layout_marginBottom="@dimen/quarter_spacing"
         }
 
         activityMainBinding.save.setOnClickListener {
@@ -60,7 +62,6 @@ class MainActivity : AppCompatActivity() {
                     ).show()
                     return@setOnClickListener
                 }
-
                 viewModel.changeContent(content)
                 viewModel.save()
 
@@ -73,6 +74,7 @@ class MainActivity : AppCompatActivity() {
 
         activityMainBinding.cancel.setOnClickListener {
             with(activityMainBinding.content) {
+                viewModel.clearEdit()
                 activityMainBinding.group.visibility = View.GONE
                 setText("")
                 clearFocus()
@@ -83,6 +85,5 @@ class MainActivity : AppCompatActivity() {
             adapter.submitList(posts)
         }
         activityMainBinding.list.adapter = adapter
-
     }
 }
