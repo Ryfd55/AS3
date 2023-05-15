@@ -4,7 +4,13 @@
     <string name="center_word">НМедиа!</string>
     <string name="shareCount">5</string>
     <string name="viewsCount">12,4K</string>
-    <string name="content_hint">Content</string>
-    <string name="empty_post_error">Content must not be empty</string>
-    <string name="edit">Edit</string>
+    <string name="remove">Удалить</string>
+    <string name="content_hint">Контент</string>
+    <string name="empty_post_error">Контент не может быть пустым</string>
+    <string name="edit">Изменить</string>
+    <string name="editing">Редактирование сообщения</string>
+    <string name="save">сохранить</string>
+    <string name="content">контент</string>
+    <string name="cancel">отмена</string>
+    <string name="emoji">эмоджи</string>
 </resources>

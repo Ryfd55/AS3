@@ -7,4 +7,9 @@
     <string name="content_hint">Content</string>
     <string name="empty_post_error">Content must not be empty</string>
     <string name="edit">Edit</string>
+    <string name="editing">Edit message</string>
+    <string name="save">save</string>
+    <string name="content">content</string>
+    <string name="cancel">cancel</string>
+    <string name="emoji">emoji</string>
 </resources>
