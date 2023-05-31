@@ -4,11 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/edit_text"
-    android:padding="@dimen/half_spacing"
     android:layout_marginBottom="@dimen/half_spacing"
+    android:padding="@dimen/half_spacing"
+    android:background="@drawable/shape"
     tools:context=".MainActivity">
-
 
     <ImageView
         android:id="@+id/avatar"
@@ -42,11 +41,10 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/menu"
-        style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-        app:icon="@drawable/menu"
+        style="@style/MenuStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
+        app:icon="@drawable/menu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,40 +69,38 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/likes"
         style="@style/LikeStyle"
-        android:checkable="true"
-        tools:checked="true"
-        app:icon="@drawable/ic_like"
-        android:checked="true"
-        tools:text="10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
+        android:checkable="true"
+        android:checked="true"
+        app:icon="@drawable/ic_like"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/content"
-        app:srcCompat="@drawable/likes_border" />
+        app:srcCompat="@drawable/likes_border"
+        tools:checked="true"
+        tools:text="10" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/shares"
         style="@style/ShareStyle"
-        app:icon="@drawable/shares"
-        tools:text="10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/half_spacing"
-        android:background="@android:color/transparent"
+        app:icon="@drawable/shares"
         app:layout_constraintStart_toEndOf="@id/likes"
-        app:layout_constraintTop_toBottomOf="@id/content" />
+        app:layout_constraintTop_toBottomOf="@id/content"
+        tools:text="10" />
 
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/views"
         style="@style/ShareStyle"
-        app:icon="@drawable/views"
-        tools:text="10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
+        app:icon="@drawable/views"
         app:layout_constraintBottom_toBottomOf="@+id/shares"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/content" />
+        app:layout_constraintTop_toBottomOf="@id/content"
+        tools:text="10" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,7 +17,8 @@
         app:layout_constraintBottom_toTopOf="@+id/toolsTop"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        tools:listitem="@layout/card_post"/>
+        tools:layout_editor_absoluteX="52dp"
+        tools:listitem="@layout/card_post" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/toolsTop"
@@ -96,6 +97,7 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/emoji"
         android:padding="@dimen/half_spacing"
+        style="@style/MenuStyle"
         app:layout_constraintBottom_toBottomOf="@+id/save"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/save"
@@ -105,7 +107,7 @@
         android:id="@+id/content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/edit_text"
+        android:background="@drawable/shape"
         android:hint="@string/content_hint"
         android:importantForAutofill="no"
         app:layout_constraintCircleRadius="10dp"
@@ -130,7 +132,6 @@
         android:padding="@dimen/half_spacing"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="@dimen/half_spacing"
         app:srcCompat="@drawable/ic_save" />
 
 
