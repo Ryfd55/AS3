@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onEdit(post: Post) {
                     viewModel.edit(post)
+                    newPostContract.launch(post.content)
                 }
 
                 override fun onLike(post: Post) {
@@ -61,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             adapter.submitList(posts)
         }
         activityMainBinding.add.setOnClickListener {
-            newPostContract.launch()
+            newPostContract.launch("")
         }
 
 //        viewModel.edited.observe(this) {
