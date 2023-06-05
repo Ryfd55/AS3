@@ -1,6 +1,7 @@
 package ru.netology.nmedia3.activity
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -54,6 +55,14 @@ class MainActivity : AppCompatActivity() {
                     startActivity(startIntent)
 //                    viewModel.shareById(post.id)
                 }
+
+                override fun onVideo(post: Post) {
+                    val intent =
+                        Intent(Intent.ACTION_VIEW, Uri.parse(post.video))
+                    if (intent.resolveActivity(packageManager) != null) {
+                        startActivity(intent)
+                    }
+                }
             }
         )
         activityMainBinding.list.adapter = adapter
@@ -64,47 +73,5 @@ class MainActivity : AppCompatActivity() {
         activityMainBinding.add.setOnClickListener {
             newPostContract.launch("")
         }
-
-//        viewModel.edited.observe(this) {
-//            if (it.id == 0L) {
-//                return@observe
-//            }
-//            activityMainBinding.content.requestFocus()
-//            activityMainBinding.content.setText(it.content)
-//            activityMainBinding.textForEdit.setText(it.content)
-//            activityMainBinding.group.visibility = View.VISIBLE
-////            activityMainBinding.content.marginBottom = View (R.dimen.half_spacing)
-////            android:layout_marginBottom="@dimen/quarter_spacing"
-//        }
-//
-//        activityMainBinding.save.setOnClickListener {
-//            with(activityMainBinding.content) {
-//                val content = text.toString()
-//                if (content.isNullOrBlank()) {
-//                    Toast.makeText(
-//                        this@MainActivity, R.string.empty_post_error,
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                    return@setOnClickListener
-//                }
-//                viewModel.changeContent(content)
-//                viewModel.save()
-//
-//                activityMainBinding.group.visibility = View.GONE
-//                setText("")
-//                clearFocus()
-//                AndroidUtils.hideKeyboard(this)
-//            }
-//        }
-//
-//        activityMainBinding.cancel.setOnClickListener {
-//            with(activityMainBinding.content) {
-//                viewModel.clearEdit()
-//                activityMainBinding.group.visibility = View.GONE
-//                setText("")
-//                clearFocus()
-//                AndroidUtils.hideKeyboard(this)
-//            }
-//        }
-     }
+    }
 }
