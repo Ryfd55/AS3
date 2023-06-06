@@ -4,16 +4,12 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
-import androidx.activity.result.launch
 import androidx.activity.viewModels
 import ru.netology.nmedia3.R
 import ru.netology.nmedia3.adapter.PostAdapter
 import ru.netology.nmedia3.adapter.PostListener
 import ru.netology.nmedia3.databinding.ActivityMainBinding
 import ru.netology.nmedia3.dto.Post
-import ru.netology.nmedia3.utils.AndroidUtils
 import ru.netology.nmedia3.viewmodel.PostViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -63,6 +59,7 @@ class MainActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
                 }
+
             }
         )
         activityMainBinding.list.adapter = adapter
