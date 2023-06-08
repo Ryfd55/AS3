@@ -6,4 +6,5 @@
     <dimen name="double_spacing">32dp</dimen>
     <dimen name="icon_button_padding">12dp</dimen>
     <dimen name="icon_button_min_size">48dp</dimen>
+    <dimen name="three_and_half_spacing">56dp</dimen>
 </resources>

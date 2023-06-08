@@ -5,19 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/edit_gray"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:padding="@dimen/common_spacing"
+        android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/toolsTop"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="52dp"
         tools:listitem="@layout/card_post" />
 
     <androidx.constraintlayout.widget.Barrier
@@ -62,7 +56,6 @@
         android:paddingStart="@dimen/half_spacing"
         android:paddingEnd="@dimen/half_spacing"
         android:paddingBottom="@dimen/half_spacing"
-        app:layout_constraintBottom_toTopOf="@+id/toolsBottom"
         app:layout_constraintEnd_toStartOf="@+id/cancel"
         app:layout_constraintStart_toEndOf="@+id/edit" />
 
@@ -72,9 +65,7 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/cancel"
         android:padding="@dimen/half_spacing"
-        app:layout_constraintBottom_toTopOf="@+id/toolsBottom"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/content"
         app:srcCompat="@drawable/ic_cancel" />
 
     <androidx.constraintlayout.widget.Group
@@ -84,55 +75,14 @@
         android:visibility="gone"
         app:constraint_referenced_ids="edit, above_edit, text_for_edit,cancel" />
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/toolsBottom"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:barrierDirection="top"
-        app:constraint_referenced_ids="emoji, content,save" />
-
-    <ImageView
-        android:id="@+id/emoji"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/emoji"
-        android:padding="@dimen/half_spacing"
-        style="@style/MenuStyle"
-        app:layout_constraintBottom_toBottomOf="@+id/save"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/save"
-        app:srcCompat="@drawable/ic_emoji" />
-
-    <EditText
-        android:id="@+id/content"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape"
-        android:hint="@string/content_hint"
-        android:importantForAutofill="no"
-        app:layout_constraintCircleRadius="10dp"
-        app:circularflow_radiusInDP="10"
-        android:shadowRadius="10"
-        app:circularflow_defaultRadius="10dp"
-        android:radius="15dp"
-        android:maxLines="10"
-        android:padding="@dimen/half_spacing"
-        android:layout_marginBottom="@dimen/half_spacing"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/save"
-        app:layout_constraintStart_toEndOf="@+id/emoji"
-        app:layout_constraintTop_toTopOf="@+id/toolsBottom" />
-
-    <ImageView
-        android:id="@+id/save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/save"
-        android:padding="@dimen/half_spacing"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_save" />
+        android:layout_margin="@dimen/common_spacing"
+        app:srcCompat="@drawable/ic_add_24dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

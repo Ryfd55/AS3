@@ -12,6 +12,7 @@ interface PostListener {
     fun onEdit(post: Post)
     fun onLike(post: Post)
     fun onLShare(post: Post)
+    fun onVideo(post: Post)
 
 }
 

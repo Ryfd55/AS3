@@ -5,9 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/half_spacing"
-    android:padding="@dimen/half_spacing"
     android:background="@drawable/shape"
-    tools:context=".MainActivity">
+    android:padding="@dimen/half_spacing"
+    tools:context=".activity.MainActivity">
+
 
     <ImageView
         android:id="@+id/avatar"
@@ -66,6 +67,38 @@
         app:layout_constraintTop_toBottomOf="@id/barrierOverContent"
         tools:text="@sample/posts.json/data/content" />
 
+    <FrameLayout
+        android:id="@+id/videoContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/content">
+
+        <ImageView
+            android:id="@+id/videoPreview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:visibility="visible"
+            app:srcCompat="@drawable/preview" />
+
+        <ImageView
+            android:id="@+id/playVideoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            app:srcCompat="@drawable/ic_play_48dp" />
+    </FrameLayout>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrierOverLike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="videoContainer,content" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/likes"
         style="@style/LikeStyle"
@@ -75,7 +108,7 @@
         android:checked="true"
         app:icon="@drawable/ic_like"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/content"
+        app:layout_constraintTop_toBottomOf="@id/barrierOverLike"
         app:srcCompat="@drawable/likes_border"
         tools:checked="true"
         tools:text="10" />
@@ -88,9 +121,8 @@
         android:layout_marginStart="@dimen/half_spacing"
         app:icon="@drawable/shares"
         app:layout_constraintStart_toEndOf="@id/likes"
-        app:layout_constraintTop_toBottomOf="@id/content"
+        app:layout_constraintTop_toBottomOf="@id/barrierOverLike"
         tools:text="10" />
-
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/views"
@@ -101,6 +133,7 @@
         app:icon="@drawable/views"
         app:layout_constraintBottom_toBottomOf="@+id/shares"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/content"
+        app:layout_constraintTop_toBottomOf="@id/barrierOverLike"
         tools:text="10" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
