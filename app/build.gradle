@@ -45,6 +45,7 @@ dependencies {
     def espresso_core_version = "3.5.1"
     def activity_version = "1.7.1"
     def lifecycle_version = "2.6.1"
+    def gson_version = "2.10.1"
 
 
 
@@ -60,4 +61,5 @@ dependencies {
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
+    implementation "com.google.code.gson:gson:$gson_version"
 }

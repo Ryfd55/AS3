@@ -1,10 +1,12 @@
 package ru.netology.nmedia3.activity
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia3.R
 import ru.netology.nmedia3.adapter.PostAdapter
 import ru.netology.nmedia3.adapter.PostListener
@@ -15,6 +17,13 @@ import ru.netology.nmedia3.viewmodel.PostViewModel
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val prefs = getSharedPreferences("posts", Context.MODE_PRIVATE)
+        prefs.edit().apply {
+            putString("key", "test")
+            apply()
+        }
+
         val activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
 
