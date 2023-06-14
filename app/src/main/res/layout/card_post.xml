@@ -6,8 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/half_spacing"
     android:background="@drawable/shape"
-    android:padding="@dimen/half_spacing"
-    tools:context=".activity.MainActivity">
+    android:padding="@dimen/half_spacing">
 
 
     <ImageView
