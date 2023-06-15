@@ -63,6 +63,9 @@ class PostViewHolder(
                     }
                 }.show()
             }
+            root.setOnClickListener {
+                listener.onDetailsClicked(post)
+            }
             likes.text = Shortening.shortening(post.likes)
             shares.text = Shortening.shortening(post.shares)
         }

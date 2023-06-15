@@ -25,15 +25,7 @@ class FeedFragment : Fragment() {
     ): View {
         super.onCreate(savedInstanceState)
 
-//        val prefs = getSharedPreferences("posts", Context.MODE_PRIVATE)
-//        prefs.edit().apply {
-//            putString("key", "test")
-//            apply()
-//        }
-
         val binding = FragmentFeedBinding.inflate(layoutInflater)
-
-
         val viewModel: PostViewModel by activityViewModels()
 
         val adapter = PostAdapter(
@@ -67,8 +59,14 @@ class FeedFragment : Fragment() {
                         Intent(Intent.ACTION_VIEW, Uri.parse(post.video))
                     startActivity(intent)
                 }
+
+                override fun onDetailsClicked(post: Post) {
+                    super.onDetailsClicked(post)
+                }
             }
         )
+
+
         binding.list.adapter = adapter
 
         viewModel.data.observe(viewLifecycleOwner) { posts ->
