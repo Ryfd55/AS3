@@ -3,7 +3,6 @@ package ru.netology.nmedia3.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia3.databinding.CardPostBinding
 import ru.netology.nmedia3.dto.Post
 
@@ -11,7 +10,7 @@ interface PostListener {
     fun onRemove(post: Post)
     fun onEdit(post: Post)
     fun onLike(post: Post)
-    fun onLShare(post: Post)
+    fun onShare(post: Post)
     fun onVideo(post: Post)
     fun onDetailsClicked(post: Post)
 
@@ -28,9 +27,10 @@ class PostAdapter(
 
         return PostViewHolder(
             binding = binding,
-            listener = this.listener
+            listener = listener
         )
     }
+
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         holder.bind(getItem(position))
     }

@@ -30,7 +30,7 @@ class AppActivity : AppCompatActivity(){
                     .show()
             }
             findNavController(R.id.nav_host_fragment)
-                .navigate(R.id.action_feedFragment_to_newPostFragment2,
+                .navigate(R.id.action_feedFragment_to_newPostFragment,
                     bundleOf("textArg" to text)
                 )
         }

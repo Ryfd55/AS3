@@ -8,9 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia3.databinding.FragmentNewPostBinding
+import ru.netology.nmedia3.utils.TextArg
 import ru.netology.nmedia3.viewmodel.PostViewModel
 
 class NewPostFragment1 : Fragment() {
+    companion object {
+        var Bundle.textArg: String? by TextArg
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,10 +30,9 @@ class NewPostFragment1 : Fragment() {
         val viewModel: PostViewModel by activityViewModels()
 
         arguments?.let{
-            val text = it.getString("textArg", null)
+            val text = it.textArg
             binding.content.setText(text)
         }
-//        binding.content.setText(intent?.getStringExtra(Intent.EXTRA_TEXT))
         binding.ok.setOnClickListener {
 
 
