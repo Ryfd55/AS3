@@ -8,10 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia3.databinding.FragmentNewPostBinding
+import ru.netology.nmedia3.utils.AndroidUtils
 import ru.netology.nmedia3.utils.TextArg
 import ru.netology.nmedia3.viewmodel.PostViewModel
 
-class NewPostFragment1 : Fragment() {
+class NewPostFragment : Fragment() {
     companion object {
         var Bundle.textArg: String? by TextArg
     }
@@ -37,6 +38,7 @@ class NewPostFragment1 : Fragment() {
             if (text.isNotBlank()) {
                 viewModel.changeContent(text)
                 viewModel.save()
+                AndroidUtils.hideKeyboard(requireView())
             }
             findNavController().navigateUp()
         }

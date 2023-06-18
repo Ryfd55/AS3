@@ -19,7 +19,6 @@ interface PostListener {
 class PostAdapter(
     private val listener: PostListener
 
-
 ) : ListAdapter<Post, PostViewHolder>(PostDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding =

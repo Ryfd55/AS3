@@ -20,7 +20,6 @@ class AppActivity : AppCompatActivity(){
             if(it.action != Intent.ACTION_SEND){
                 return@let
             }
-
             val text = it.getStringExtra(Intent.EXTRA_TEXT)
             if (text.isNullOrBlank()){
                 Snackbar.make(binding.root, R.string.error_empty_content, Snackbar.LENGTH_INDEFINITE)

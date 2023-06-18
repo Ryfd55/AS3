@@ -6,17 +6,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia3.R
-import ru.netology.nmedia3.Shortening
 import ru.netology.nmedia3.adapter.PostListener
 import ru.netology.nmedia3.adapter.PostViewHolder
 import ru.netology.nmedia3.databinding.FragmentDetailsPostBinding
-import ru.netology.nmedia3.databinding.FragmentFeedBinding
 import ru.netology.nmedia3.dto.Post
 import ru.netology.nmedia3.utils.LongArg
 import ru.netology.nmedia3.viewmodel.PostViewModel
@@ -59,7 +56,7 @@ class PostDetailsFragment : Fragment() {
                             override fun onEdit(post: Post) {
                                 viewModel.edit(post)
                                 findNavController().navigate(
-                                    R.id.action_postDetailsFragment_to_newPostFragment2,
+                                    R.id.action_postDetailsFragment_to_newPostFragment,
                                     bundleOf("textArg" to post.content)
                                 )
                             }
@@ -87,7 +84,6 @@ class PostDetailsFragment : Fragment() {
                             override fun onVideo(post: Post) {
                                 val intent =
                                     Intent(Intent.ACTION_VIEW, Uri.parse(post.video))
-
                                 startActivity(intent)
                             }
 

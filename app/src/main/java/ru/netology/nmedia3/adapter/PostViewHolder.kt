@@ -8,7 +8,6 @@ import ru.netology.nmedia3.Shortening
 import ru.netology.nmedia3.databinding.CardPostBinding
 import ru.netology.nmedia3.dto.Post
 
-
 class PostViewHolder(
     private val binding: CardPostBinding,
     private val listener: PostListener
@@ -28,7 +27,7 @@ class PostViewHolder(
             likes.setOnClickListener {
                 listener.onLike(post)
             }
-            if(!post.video.isNullOrBlank()) {
+            if (!post.video.isNullOrBlank()) {
                 videoPreview.visibility = View.VISIBLE
                 playVideoButton.visibility = View.VISIBLE
             } else {
