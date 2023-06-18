@@ -1,13 +1,23 @@
 package ru.netology.nmedia3.activity
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import ru.netology.nmedia3.R
 import ru.netology.nmedia3.Shortening
+import ru.netology.nmedia3.adapter.PostListener
+import ru.netology.nmedia3.adapter.PostViewHolder
 import ru.netology.nmedia3.databinding.FragmentDetailsPostBinding
+import ru.netology.nmedia3.databinding.FragmentFeedBinding
+import ru.netology.nmedia3.dto.Post
 import ru.netology.nmedia3.utils.LongArg
 import ru.netology.nmedia3.viewmodel.PostViewModel
 
@@ -32,30 +42,58 @@ class PostDetailsFragment : Fragment() {
         )
         arguments?.let { it ->
             val postId = it.getLong("postId", -1)
-//        val postId = arguments?.idArg ?: -1
-            viewModel.data.observe(viewLifecycleOwner) { posts ->
-                val post = posts.find { it.id == postId } ?: return@observe
 
-                with(binding) {
-                    author.text = post.author
-                    content.text = post.content
-                    published.text = post.published
+            viewModel.data.observe(viewLifecycleOwner) { list ->
+                list.find { it.id == postId }?.let { post ->
 
-                    likes.isChecked = post.likedByMe
-                    likes.text = post.likes.toString()
-                    shares.text = post.shares.toString()
-                    views.text = post.views
+                    PostViewHolder(
+                        binding.postDetailsFragment,
+                        object : PostListener {
+                            override fun onRemove(post: Post) {
+                                viewModel.removeById(post.id)
+                                findNavController().navigate(
+                                    R.id.action_postDetailsFragment_to_feedFragment
+                                )
+                            }
 
-                    if (!post.video.isNullOrBlank()) {
-                        videoPreview.visibility = View.VISIBLE
-                        playVideoButton.visibility = View.VISIBLE
-                    } else {
-                        videoPreview.visibility = View.GONE
-                        playVideoButton.visibility = View.GONE
-                    }
-                    likes.text = Shortening.shortening(post.likes)
-                    shares.text = Shortening.shortening(post.shares)
+                            override fun onEdit(post: Post) {
+                                viewModel.edit(post)
+                                findNavController().navigate(
+                                    R.id.action_postDetailsFragment_to_newPostFragment2,
+                                    bundleOf("textArg" to post.content)
+                                )
+                            }
 
+                            override fun onLike(post: Post) {
+                                viewModel.likeById(post.id)
+                            }
+
+                            override fun onShare(post: Post) {
+                                viewModel.shareById(post.id)
+                                val intent = Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    putExtra(Intent.EXTRA_TEXT, post.content)
+                                    type = "text/plain"
+                                }
+
+                                val startIntent =
+                                    Intent.createChooser(
+                                        intent,
+                                        getString(R.string.chooser_share_post)
+                                    )
+                                startActivity(startIntent)
+                            }
+
+                            override fun onVideo(post: Post) {
+                                val intent =
+                                    Intent(Intent.ACTION_VIEW, Uri.parse(post.video))
+
+                                startActivity(intent)
+                            }
+
+                            override fun onDetailsClicked(post: Post) {}
+                        }
+                    ).bind(post)
                 }
             }
         }

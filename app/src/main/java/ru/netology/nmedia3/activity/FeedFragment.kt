@@ -37,8 +37,6 @@ class FeedFragment : Fragment() {
                 }
 
                 override fun onEdit(post: Post) {
-//                    viewModel.edit(post)
-//                    newPostContract.launch(post.content)
                 }
 
                 override fun onLike(post: Post) {

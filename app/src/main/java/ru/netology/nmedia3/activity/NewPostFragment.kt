@@ -26,16 +26,13 @@ class NewPostFragment1 : Fragment() {
             container,
             false
         )
-
         val viewModel: PostViewModel by activityViewModels()
 
-        arguments?.let{
+        arguments?.let {
             val text = it.textArg
             binding.content.setText(text)
         }
         binding.ok.setOnClickListener {
-
-
             val text = binding.content.text.toString()
             if (text.isNotBlank()) {
                 viewModel.changeContent(text)
