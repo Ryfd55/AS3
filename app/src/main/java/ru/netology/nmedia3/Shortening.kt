@@ -1,7 +1,7 @@
 package ru.netology.nmedia3
 
 object Shortening {
-    fun shortening(number: Long): String {
+    fun shortening(number: Int): String {
         return when (number.toString().length) {
             in 1..3 -> number.toString()
             4 -> ((number.toInt() / 100).toDouble() / 10).toString().dropLastWhile {

@@ -22,7 +22,7 @@ class PostViewHolder(
             likes.isChecked = post.likedByMe
             likes.text = post.likes.toString()
             shares.text = post.shares.toString()
-            views.text = post.views
+            views.text = post.views.toString()
 
             likes.setOnClickListener {
                 listener.onLike(post)
