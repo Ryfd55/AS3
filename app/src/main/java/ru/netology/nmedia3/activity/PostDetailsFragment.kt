@@ -27,15 +27,11 @@ class PostDetailsFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         super.onCreate(savedInstanceState)
         val binding = FragmentDetailsPostBinding.inflate(
-            layoutInflater,
-            container,
-            false
+            layoutInflater, container, false
         )
         arguments?.let { it ->
             val postId = it.getLong("postId", -1)
@@ -43,53 +39,47 @@ class PostDetailsFragment : Fragment() {
             viewModel.data.observe(viewLifecycleOwner) { list ->
                 list.find { it.id == postId }?.let { post ->
 
-                    PostViewHolder(
-                        binding.postDetailsFragment,
-                        object : PostListener {
-                            override fun onRemove(post: Post) {
-                                viewModel.removeById(post.id)
-                                findNavController().navigate(
-                                    R.id.action_postDetailsFragment_to_feedFragment
-                                )
-                            }
-
-                            override fun onEdit(post: Post) {
-                                viewModel.edit(post)
-                                findNavController().navigate(
-                                    R.id.action_postDetailsFragment_to_newPostFragment,
-                                    bundleOf("textArg" to post.content)
-                                )
-                            }
-
-                            override fun onLike(post: Post) {
-                                viewModel.likeById(post.id)
-                            }
-
-                            override fun onShare(post: Post) {
-                                viewModel.shareById(post.id)
-                                val intent = Intent().apply {
-                                    action = Intent.ACTION_SEND
-                                    putExtra(Intent.EXTRA_TEXT, post.content)
-                                    type = "text/plain"
-                                }
-
-                                val startIntent =
-                                    Intent.createChooser(
-                                        intent,
-                                        getString(R.string.chooser_share_post)
-                                    )
-                                startActivity(startIntent)
-                            }
-
-                            override fun onVideo(post: Post) {
-                                val intent =
-                                    Intent(Intent.ACTION_VIEW, Uri.parse(post.video))
-                                startActivity(intent)
-                            }
-
-                            override fun onDetailsClicked(post: Post) {}
+                    PostViewHolder(binding.postDetailsFragment, object : PostListener {
+                        override fun onRemove(post: Post) {
+                            viewModel.removeById(post.id)
+                            findNavController().navigate(
+                                R.id.action_postDetailsFragment_to_feedFragment
+                            )
                         }
-                    ).bind(post)
+
+                        override fun onEdit(post: Post) {
+                            viewModel.edit(post)
+                            findNavController().navigate(
+                                R.id.action_postDetailsFragment_to_newPostFragment,
+                                bundleOf("textArg" to post.content)
+                            )
+                        }
+
+                        override fun onLike(post: Post) {
+                            viewModel.likeById(post.id)
+                        }
+
+                        override fun onShare(post: Post) {
+                            viewModel.shareById(post.id)
+                            val intent = Intent().apply {
+                                action = Intent.ACTION_SEND
+                                putExtra(Intent.EXTRA_TEXT, post.content)
+                                type = "text/plain"
+                            }
+
+                            val startIntent = Intent.createChooser(
+                                intent, getString(R.string.chooser_share_post)
+                            )
+                            startActivity(startIntent)
+                        }
+
+                        override fun onVideo(post: Post) {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.video))
+                            startActivity(intent)
+                        }
+
+                        override fun onDetailsClicked(post: Post) {}
+                    }).bind(post)
                 }
             }
         }

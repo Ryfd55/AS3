@@ -18,14 +18,10 @@ class NewPostFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         val binding = FragmentNewPostBinding.inflate(
-            inflater,
-            container,
-            false
+            inflater, container, false
         )
         val viewModel: PostViewModel by activityViewModels()
 
