@@ -15,16 +15,11 @@ import ru.netology.nmedia3.adapter.PostListener
 import ru.netology.nmedia3.adapter.PostViewHolder
 import ru.netology.nmedia3.databinding.FragmentDetailsPostBinding
 import ru.netology.nmedia3.dto.Post
-import ru.netology.nmedia3.utils.LongArg
 import ru.netology.nmedia3.viewmodel.PostViewModel
 
 class PostDetailsFragment : Fragment() {
 
     private val viewModel: PostViewModel by activityViewModels()
-
-    companion object {
-        var Bundle.idArg: Long? by LongArg
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

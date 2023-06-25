@@ -13,7 +13,6 @@ interface PostListener {
     fun onShare(post: Post)
     fun onVideo(post: Post)
     fun onDetailsClicked(post: Post)
-
 }
 
 class PostAdapter(
@@ -34,3 +33,4 @@ class PostAdapter(
         holder.bind(getItem(position))
     }
 }
+

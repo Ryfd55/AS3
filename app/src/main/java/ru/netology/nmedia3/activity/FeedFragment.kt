@@ -15,6 +15,7 @@ import ru.netology.nmedia3.adapter.PostAdapter
 import ru.netology.nmedia3.adapter.PostListener
 import ru.netology.nmedia3.databinding.FragmentFeedBinding
 import ru.netology.nmedia3.dto.Post
+import ru.netology.nmedia3.utils.TextArg
 import ru.netology.nmedia3.viewmodel.PostViewModel
 
 class FeedFragment : Fragment() {
@@ -80,12 +81,17 @@ class FeedFragment : Fragment() {
             adapter.submitList(posts)
         }
         binding.add.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+            findNavController().navigate(
+                R.id.action_feedFragment_to_newPostFragment,
+                bundleOf("textArg" to TextArg.draftText)
+            )
         }
         return binding.root
     }
+
     override fun onResume() {
         super.onResume()
         viewModel.clearEdit()
     }
 }
+

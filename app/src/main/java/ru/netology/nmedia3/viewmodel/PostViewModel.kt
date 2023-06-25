@@ -41,7 +41,6 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     fun edit(post: Post) {
         edited.value = post
     }
-
     fun changeContent(content: String) {
         edited.value?.let { post ->
             if (content != post.content) {
@@ -54,3 +53,4 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         edited.value = empty
     }
 }
+

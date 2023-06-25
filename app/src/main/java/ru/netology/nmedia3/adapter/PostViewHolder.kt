@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import ru.netology.nmedia3.R
-import ru.netology.nmedia3.Shortening
+import ru.netology.nmedia3.utils.Shortening
 import ru.netology.nmedia3.databinding.CardPostBinding
 import ru.netology.nmedia3.dto.Post
 
@@ -49,12 +49,10 @@ class PostViewHolder(
                                 listener.onRemove(post)
                                 true
                             }
-
                             R.id.edit -> {
                                 listener.onEdit(post)
                                 true
                             }
-
                             else -> false
                         }
                         false
@@ -69,3 +67,4 @@ class PostViewHolder(
         }
     }
 }
+
