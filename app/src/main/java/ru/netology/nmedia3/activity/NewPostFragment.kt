@@ -4,22 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia3.R
 import ru.netology.nmedia3.databinding.FragmentNewPostBinding
 import ru.netology.nmedia3.utils.AndroidUtils
-import ru.netology.nmedia3.utils.TextArg.draftText
-import ru.netology.nmedia3.utils.TextArg
 import ru.netology.nmedia3.viewmodel.PostViewModel
 import androidx.activity.OnBackPressedCallback
+import ru.netology.nmedia3.SharedPreferencesHelper
 
 class NewPostFragment : Fragment() {
-    companion object {
-        var Bundle.textArg: String? by TextArg
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -28,17 +23,16 @@ class NewPostFragment : Fragment() {
             inflater, container, false
         )
         val viewModel: PostViewModel by activityViewModels()
+        val currentValue = SharedPreferencesHelper.getDraftContent(requireContext())
+        binding.content.setText(currentValue)
 
-        arguments?.let {
-            val text = it.textArg
-            binding.content.setText(text)
-        }
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                draftText = binding.content.text.toString()
+                val draftContent = binding.content.text.toString()
+                SharedPreferencesHelper.saveDraftContent(requireContext(), draftContent)
+
                 findNavController().navigate(
-                    R.id.action_newPostFragment_to_feedFragment,
-                    bundleOf("textArg" to draftText)
+                    R.id.action_newPostFragment_to_feedFragment
                 )
             }
         }
@@ -49,7 +43,7 @@ class NewPostFragment : Fragment() {
             if (text.isNotBlank()) {
                 viewModel.changeContent(text)
                 viewModel.save()
-                draftText = ""
+                SharedPreferencesHelper.saveDraftContent(requireContext(), "")
                 AndroidUtils.hideKeyboard(requireView())
             }
             findNavController().navigateUp()
@@ -57,4 +51,3 @@ class NewPostFragment : Fragment() {
         return binding.root
     }
 }
-

@@ -6,11 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia3.R
+import ru.netology.nmedia3.SharedPreferencesHelper
 import ru.netology.nmedia3.adapter.PostListener
 import ru.netology.nmedia3.adapter.PostViewHolder
 import ru.netology.nmedia3.databinding.FragmentDetailsPostBinding
@@ -44,10 +44,9 @@ class PostDetailsFragment : Fragment() {
 
                         override fun onEdit(post: Post) {
                             viewModel.edit(post)
+                            SharedPreferencesHelper.saveDraftContent(requireContext(), post.content)
                             findNavController().navigate(
-                                R.id.action_postDetailsFragment_to_newPostFragment,
-                                bundleOf("textArg" to post.content)
-                            )
+                                R.id.action_postDetailsFragment_to_newPostFragment)
                         }
 
                         override fun onLike(post: Post) {

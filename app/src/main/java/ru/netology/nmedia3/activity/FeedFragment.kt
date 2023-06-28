@@ -11,11 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia3.R
+import ru.netology.nmedia3.SharedPreferencesHelper
 import ru.netology.nmedia3.adapter.PostAdapter
 import ru.netology.nmedia3.adapter.PostListener
 import ru.netology.nmedia3.databinding.FragmentFeedBinding
 import ru.netology.nmedia3.dto.Post
-import ru.netology.nmedia3.utils.TextArg
 import ru.netology.nmedia3.viewmodel.PostViewModel
 
 class FeedFragment : Fragment() {
@@ -39,10 +39,8 @@ class FeedFragment : Fragment() {
 
                 override fun onEdit(post: Post) {
                     viewModel.edit(post)
-                    findNavController().navigate(
-                        R.id.action_feedFragment_to_newPostFragment,
-                        bundleOf("textArg" to post.content)
-                    )
+                    SharedPreferencesHelper.saveDraftContent(requireContext(), post.content)
+                    findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
                 }
 
                 override fun onLike(post: Post) {
@@ -50,6 +48,7 @@ class FeedFragment : Fragment() {
                 }
 
                 override fun onShare(post: Post) {
+                    viewModel.shareById(post.id)
                     val intent = Intent().apply {
                         action = Intent.ACTION_SEND
                         putExtra(Intent.EXTRA_TEXT, post.content)
@@ -82,8 +81,7 @@ class FeedFragment : Fragment() {
         }
         binding.add.setOnClickListener {
             findNavController().navigate(
-                R.id.action_feedFragment_to_newPostFragment,
-                bundleOf("textArg" to TextArg.draftText)
+                R.id.action_feedFragment_to_newPostFragment
             )
         }
         return binding.root
@@ -94,4 +92,3 @@ class FeedFragment : Fragment() {
         viewModel.clearEdit()
     }
 }
-
