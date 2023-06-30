@@ -3,8 +3,6 @@ package ru.netology.nmedia3.activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
-import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia3.R
 import ru.netology.nmedia3.databinding.ActivityAppBinding
@@ -32,11 +30,6 @@ class AppActivity : AppCompatActivity() {
                     }
                     .show()
             }
-            findNavController(R.id.nav_host_fragment)
-                .navigate(
-                    R.id.action_feedFragment_to_newPostFragment,
-                    bundleOf("textArg" to text)
-                )
         }
     }
 }
