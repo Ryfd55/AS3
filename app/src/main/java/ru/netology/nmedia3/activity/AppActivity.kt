@@ -1,6 +1,8 @@
 package ru.netology.nmedia3.activity
 
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
@@ -10,6 +12,9 @@ import ru.netology.nmedia3.databinding.ActivityAppBinding
 class AppActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissions(arrayOf(POST_NOTIFICATIONS), 100500)
+        }
 
         val binding = ActivityAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
