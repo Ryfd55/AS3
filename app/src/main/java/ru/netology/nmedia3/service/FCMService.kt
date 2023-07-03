@@ -38,9 +38,23 @@ class FCMService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
 
-        message.data[action]?.let {
-            when (Action.valueOf(it)) {
-                Action.LIKE -> handleLike(gson.fromJson(message.data[content], Like::class.java))
+
+        message.data[action]?.let { text ->
+            Action.values().find { it.name == text }?.also {
+                when (it) {
+                    Action.LIKE -> handleLike(
+                        gson.fromJson(
+                            message.data[content],
+                            Like::class.java
+                        )
+                    )
+                    Action.NEW_POST -> handleNewPost(
+                        gson.fromJson(
+                            message.data[content],
+                            NewPost::class.java
+                        )
+                    )
+                }
             }
         }
     }
@@ -68,9 +82,33 @@ class FCMService : FirebaseMessagingService() {
         }
     }
 
+     private fun handleNewPost(content: NewPost) {
+        val notification = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle(
+                getString(
+                    R.string.notification_new_post,
+                    content.postAuthor
+                )
+            )
+            .setContentText(content.postTopic)
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText(content.postText))
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            NotificationManagerCompat.from(this)
+                .notify(Random.nextInt(100_000), notification)
+        }
+    }
+
 
     enum class Action {
-        LIKE,
+        LIKE, NEW_POST
     }
 
     data class Like(
@@ -78,6 +116,13 @@ class FCMService : FirebaseMessagingService() {
         val userName: String,
         val postId: Long,
         val postAuthor: String,
+    )
+
+    data class NewPost(
+        val postAuthor: String,
+        val postText: String,
+        val postTopic: String
+
     )
 
     override fun onNewToken(token: String) {
