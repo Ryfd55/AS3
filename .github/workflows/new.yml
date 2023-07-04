@@ -18,6 +18,11 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 17
+  
+      - name: Decode google-services.json
+        env:
+          google_services_jsonT: ${{ secrets.google_services_json }}
+        run: echo $google_services_json > ./app/google-services.json
 
       - name: Build
         run: |
