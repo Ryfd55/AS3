@@ -9,16 +9,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import ru.netology.nmedia3.dto.Post
 import java.util.concurrent.TimeUnit
 
-
-private val empty = Post(
-    id = 0,
-    content = "",
-    author = "",
-    likedByMe = false,
-    likes = 0,
-    published = ""
-)
-class PostRepositoryImpl: PostRepository {
+class PostRepositoryImpl : PostRepository {
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
         .build()
@@ -43,32 +34,23 @@ class PostRepositoryImpl: PostRepository {
             }
     }
 
-    override fun likeById(id: Long) {
-        val requestInput: Request = Request.Builder()
-            .url("${BASE_URL}/api/slow/posts/$id")
-            .build()
-        val post: Post = client.newCall(requestInput)
-            .execute()
-            .let {
-                gson.fromJson(it.body?.string(), Post::class.java)
-            } ?: empty
-        val requestOutput: Request = if (post.likedByMe) {
+    override fun likeById(post: Post): Post {
+        val requestOutput: Request = if (!post.likedByMe) {
             Request.Builder()
-                .delete(gson.toJson(post).toRequestBody(jsonType))
-                .url("${BASE_URL}/api/slow/posts/$id/likes")
+                .post(gson.toJson(post).toRequestBody(jsonType))
+                .url("${BASE_URL}/api/slow/posts/${post.id}/likes")
                 .build()
         } else {
             Request.Builder()
-                .post(gson.toJson(post).toRequestBody(jsonType))
-                .url("${BASE_URL}/api/slow/posts/$id/likes")
+                .delete(gson.toJson(post).toRequestBody(jsonType))
+                .url("${BASE_URL}/api/slow/posts/${post.id}/likes")
                 .build()
         }
-        client.newCall(requestOutput)
+        return client.newCall(requestOutput)
             .execute()
-            .close()
+            .let { it.body?.string() ?: throw RuntimeException("error") }
+            .let { gson.fromJson(it, Post::class.java) }
     }
-
-
 
     override fun save(post: Post) {
         val request: Request = Request.Builder()

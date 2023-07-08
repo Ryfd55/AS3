@@ -4,21 +4,12 @@ import android.app.Application
 import androidx.lifecycle.*
 import ru.netology.nmedia3.dto.Post
 import ru.netology.nmedia3.model.FeedModel
-import ru.netology.nmedia3.repository.*
 import ru.netology.nmedia3.util.SingleLiveEvent
 import ru.netology.nmedia3.repository.PostRepository
 import ru.netology.nmedia3.repository.PostRepositoryImpl
+import ru.netology.nmedia3.util.EmptyPost.empty
 import java.io.IOException
 import kotlin.concurrent.thread
-
-private val empty = Post(
-    id = 0,
-    content = "",
-    author = "",
-    likedByMe = false,
-    likes = 0,
-    published = ""
-)
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
     // упрощённый вариант
@@ -73,7 +64,15 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(id: Long) {
-        thread { repository.likeById(id) }
+        val post = data.value?.posts?.find { it.id == id } ?: empty
+        thread {
+            val likedPost = repository.likeById(post)
+            _data.postValue(
+                _data.value?.copy(posts = _data.value?.posts.orEmpty()
+                    .map { if (it.id == id) likedPost else it }
+                )
+            )
+        }
     }
 
     fun removeById(id: Long) {
