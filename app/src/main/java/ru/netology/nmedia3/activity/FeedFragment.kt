@@ -68,6 +68,11 @@ class FeedFragment : Fragment() {
             findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
         }
 
+        binding.swiperefresh.setOnRefreshListener {
+            binding.swiperefresh.isRefreshing = false
+            viewModel.loadPosts()
+        }
+
         return binding.root
     }
 }
