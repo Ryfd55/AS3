@@ -1,19 +1,17 @@
 package ru.netology.nmedia3.activity
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia3.R
-import ru.netology.nmedia3.SharedPreferencesHelper
-import ru.netology.nmedia3.adapter.PostAdapter
-import ru.netology.nmedia3.adapter.PostListener
+import ru.netology.nmedia3.adapter.OnInteractionListener
+import ru.netology.nmedia3.adapter.PostsAdapter
 import ru.netology.nmedia3.databinding.FragmentFeedBinding
 import ru.netology.nmedia3.dto.Post
 import ru.netology.nmedia3.viewmodel.PostViewModel
@@ -27,68 +25,49 @@ class FeedFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        super.onCreate(savedInstanceState)
+        val binding = FragmentFeedBinding.inflate(inflater, container, false)
 
-        val binding = FragmentFeedBinding.inflate(layoutInflater)
-
-        val adapter = PostAdapter(
-            object : PostListener {
-                override fun onRemove(post: Post) {
-                    viewModel.removeById(post.id)
-                }
-
-                override fun onEdit(post: Post) {
-                    viewModel.edit(post)
-                    SharedPreferencesHelper.saveDraftContent(requireContext(), post.content)
-                    findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
-                }
-
-                override fun onLike(post: Post) {
-                    viewModel.likeById(post.id)
-                }
-
-                override fun onShare(post: Post) {
-                    viewModel.shareById(post.id)
-                    val intent = Intent().apply {
-                        action = Intent.ACTION_SEND
-                        putExtra(Intent.EXTRA_TEXT, post.content)
-                        type = "text/plain"
-                    }
-                    val startIntent =
-                        Intent.createChooser(intent, getString(R.string.chooser_share_post))
-                    startActivity(startIntent)
-                }
-
-                override fun onVideo(post: Post) {
-                    val intent =
-                        Intent(Intent.ACTION_VIEW, Uri.parse(post.video))
-                    startActivity(intent)
-                }
-
-                override fun onDetailsClicked(post: Post) {
-                    findNavController().navigate(
-                        R.id.action_feedFragment_to_postDetailsFragment,
-                        bundleOf("postId" to post.id)
-                    )
-                }
+        val adapter = PostsAdapter(object : OnInteractionListener {
+            override fun onEdit(post: Post) {
+                viewModel.edit(post)
             }
-        )
 
+            override fun onLike(post: Post) {
+                viewModel.likeById(post.id)
+            }
+
+            override fun onRemove(post: Post) {
+                viewModel.removeById(post.id)
+            }
+
+            override fun onShare(post: Post) {
+                val intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, post.content)
+                    type = "text/plain"
+                }
+
+                val shareIntent =
+                    Intent.createChooser(intent, getString(R.string.chooser_share_post))
+                startActivity(shareIntent)
+            }
+        })
         binding.list.adapter = adapter
-
-        viewModel.data.observe(viewLifecycleOwner) { posts ->
-            adapter.submitList(posts)
+        viewModel.data.observe(viewLifecycleOwner) { state ->
+            adapter.submitList(state.posts)
+            binding.progress.isVisible = state.loading
+            binding.errorGroup.isVisible = state.error
+            binding.emptyText.isVisible = state.empty
         }
+
+        binding.retryButton.setOnClickListener {
+            viewModel.loadPosts()
+        }
+
         binding.add.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_feedFragment_to_newPostFragment
-            )
+            findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
         }
-        return binding.root
-    }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.clearEdit()
+        return binding.root
     }
 }

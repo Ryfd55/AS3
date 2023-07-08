@@ -1,12 +1,12 @@
 package ru.netology.nmedia3.service
 
 import android.Manifest
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -15,8 +15,8 @@ import com.google.gson.Gson
 import ru.netology.nmedia3.R
 import kotlin.random.Random
 
-class FCMService : FirebaseMessagingService() {
 
+class FCMService : FirebaseMessagingService() {
     private val action = "action"
     private val content = "content"
     private val channelId = "remote"
@@ -38,25 +38,15 @@ class FCMService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
 
-
-        message.data[action]?.let { text ->
-            Action.values().find { it.name == text }?.also {
-                when (it) {
-                    Action.LIKE -> handleLike(
-                        gson.fromJson(
-                            message.data[content],
-                            Like::class.java
-                        )
-                    )
-                    Action.NEW_POST -> handleNewPost(
-                        gson.fromJson(
-                            message.data[content],
-                            NewPost::class.java
-                        )
-                    )
-                }
+        message.data[action]?.let {
+            when (Action.valueOf(it)) {
+                Action.LIKE -> handleLike(gson.fromJson(message.data[content], Like::class.java))
             }
         }
+    }
+
+    override fun onNewToken(token: String) {
+        println(token)
     }
 
     private fun handleLike(content: Like) {
@@ -72,60 +62,30 @@ class FCMService : FirebaseMessagingService() {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
 
-        if (ActivityCompat.checkSelfPermission(
-                this,
+        notify(notification)
+    }
+
+    private fun notify(notification: Notification) {
+        if (
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+            checkSelfPermission(
                 Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             NotificationManagerCompat.from(this)
                 .notify(Random.nextInt(100_000), notification)
         }
-    }
-
-     private fun handleNewPost(content: NewPost) {
-        val notification = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle(
-                getString(
-                    R.string.notification_new_post,
-                    content.postAuthor
-                )
-            )
-            .setContentText(content.postTopic)
-            .setStyle(NotificationCompat.BigTextStyle()
-                .bigText(content.postText))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .build()
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            NotificationManagerCompat.from(this)
-                .notify(Random.nextInt(100_000), notification)
-        }
-    }
-
-
-    enum class Action {
-        LIKE, NEW_POST
-    }
-
-    data class Like(
-        val userId: Long,
-        val userName: String,
-        val postId: Long,
-        val postAuthor: String,
-    )
-
-    data class NewPost(
-        val postAuthor: String,
-        val postText: String,
-        val postTopic: String
-
-    )
-
-    override fun onNewToken(token: String) {
-        println(token)
     }
 }
+
+enum class Action {
+    LIKE,
+}
+
+data class Like(
+    val userId: Long,
+    val userName: String,
+    val postId: Long,
+    val postAuthor: String,
+)
+

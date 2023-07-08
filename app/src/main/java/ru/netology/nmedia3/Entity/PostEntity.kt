@@ -1,4 +1,4 @@
-package ru.netology.nmedia3.Entity
+package ru.netology.nmedia3.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -9,18 +9,17 @@ data class PostEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     val author: String,
-    val published: String,
     val content: String,
+    val published: String,
     val likedByMe: Boolean,
-    val views: Int,
-    val video: String? = null,
-    val likes: Int,
-    val shares: Int
-){
-    fun toDto() = Post(id, author, published, content, likedByMe, views, video, likes, shares)
+    val likes: Int = 0,
+) {
+    fun toDto() = Post(id, author, content, published, likedByMe, likes)
 
-    companion object{
-        fun fromDto(post: Post) = with(post)
-        { PostEntity(id, author, published, content, likedByMe, views, video, likes, shares)}
+    companion object {
+        fun fromDto(dto: Post) =
+            PostEntity(dto.id, dto.author, dto.content, dto.published, dto.likedByMe, dto.likes)
+
     }
 }
+

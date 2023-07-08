@@ -1,4 +1,4 @@
-package ru.netology.nmedia3.utils
+package ru.netology.nmedia3.util
 
 object Shortening {
     fun shortening(number: Int): String {

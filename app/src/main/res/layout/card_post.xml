@@ -66,40 +66,16 @@
         app:layout_constraintTop_toBottomOf="@id/barrierOverContent"
         tools:text="@sample/posts.json/data/content" />
 
-    <FrameLayout
-        android:id="@+id/videoContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/content">
-
-        <ImageView
-            android:id="@+id/videoPreview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:visibility="visible"
-            app:srcCompat="@drawable/preview" />
-
-        <ImageView
-            android:id="@+id/playVideoButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="visible"
-            app:srcCompat="@drawable/ic_play_48dp" />
-    </FrameLayout>
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrierOverLike"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="videoContainer,content" />
+        app:constraint_referenced_ids="content" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/likes"
+        android:id="@+id/like"
         style="@style/LikeStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -113,13 +89,13 @@
         tools:text="10" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/shares"
+        android:id="@+id/share"
         style="@style/ShareStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/half_spacing"
         app:icon="@drawable/shares"
-        app:layout_constraintStart_toEndOf="@id/likes"
+        app:layout_constraintStart_toEndOf="@id/like"
         app:layout_constraintTop_toBottomOf="@id/barrierOverLike"
         tools:text="10" />
 
@@ -130,7 +106,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         app:icon="@drawable/views"
-        app:layout_constraintBottom_toBottomOf="@+id/shares"
+        app:layout_constraintBottom_toBottomOf="@+id/share"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrierOverLike"
         tools:text="10" />
