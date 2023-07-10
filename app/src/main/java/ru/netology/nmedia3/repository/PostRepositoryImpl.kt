@@ -2,11 +2,15 @@ package ru.netology.nmedia3.repository
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import okhttp3.Call
+import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
 import ru.netology.nmedia3.dto.Post
+import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 class PostRepositoryImpl : PostRepository {
@@ -32,6 +36,29 @@ class PostRepositoryImpl : PostRepository {
             .let {
                 gson.fromJson(it, typeToken.type)
             }
+    }
+
+    override fun getAllAsync(callBack: PostRepository.GetAllCallBack) {
+        val request: Request = Request.Builder()
+            .url("${BASE_URL}/api/slow/posts")
+            .build()
+
+        client.newCall(request)
+            .enqueue(object : Callback {
+
+                override fun onResponse(call: Call, response: Response) {
+                    try {
+                        val body = response.body?.string() ?: throw RuntimeException("body is null")
+                        callBack.onSuccess(gson.fromJson(body, typeToken.type))
+                    } catch (e: Exception) {
+                        callBack.onError()
+                    }
+                }
+
+                override fun onFailure(call: Call, e: IOException) {
+                    callBack.onError()
+                }
+            })
     }
 
     override fun likeById(post: Post): Post {

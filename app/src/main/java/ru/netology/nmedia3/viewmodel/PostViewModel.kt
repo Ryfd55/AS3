@@ -27,19 +27,20 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun loadPosts() {
-        thread {
-            // Начинаем загрузку
-            _data.postValue(FeedModel(loading = true))
-            try {
-                // Данные успешно получены
-                val posts = repository.getAll()
-                FeedModel(posts = posts, empty = posts.isEmpty())
-            } catch (e: IOException) {
-                // Получена ошибка
-                FeedModel(error = true)
-            }.also(_data::postValue)
-        }
+
+        // Начинаем загрузку
+        _data.postValue(FeedModel(loading = true))
+        repository.getAllAsync(object : PostRepository.GetAllCallBack {
+            override fun onSuccess(posts: List<Post>) {
+                _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
+            }
+
+            override fun onError() {
+                _data.postValue(FeedModel(error = true))
+            }
+        })
     }
+
 
     fun save() {
         edited.value?.let {
