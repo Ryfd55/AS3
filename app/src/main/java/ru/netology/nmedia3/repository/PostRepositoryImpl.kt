@@ -25,20 +25,7 @@ class PostRepositoryImpl : PostRepository {
         private val jsonType = "application/json".toMediaType()
     }
 
-    override fun getAll(): List<Post> {
-        val request: Request = Request.Builder()
-            .url("${BASE_URL}/api/slow/posts")
-            .build()
-
-        return client.newCall(request)
-            .execute()
-            .let { it.body?.string() ?: throw RuntimeException("body is null") }
-            .let {
-                gson.fromJson(it, typeToken.type)
-            }
-    }
-
-    override fun getAllAsync(callBack: PostRepository.GetAllCallBack) {
+    override fun getAllAsync(callBack: PostRepository.RepositoryCallBack<List<Post>>) {
         val request: Request = Request.Builder()
             .url("${BASE_URL}/api/slow/posts")
             .build()
@@ -61,7 +48,7 @@ class PostRepositoryImpl : PostRepository {
             })
     }
 
-    override fun likeById(post: Post): Post {
+    override fun likeByIdAsync(post: Post, callBack: PostRepository.RepositoryCallBack<Post>) {
         val requestOutput: Request = if (!post.likedByMe) {
             Request.Builder()
                 .post(gson.toJson(post).toRequestBody(jsonType))
@@ -73,31 +60,64 @@ class PostRepositoryImpl : PostRepository {
                 .url("${BASE_URL}/api/slow/posts/${post.id}/likes")
                 .build()
         }
-        return client.newCall(requestOutput)
-            .execute()
-            .let { it.body?.string() ?: throw RuntimeException("error") }
-            .let { gson.fromJson(it, Post::class.java) }
+        client.newCall(requestOutput)
+            .enqueue(object : Callback {
+                override fun onResponse(call: Call, response: Response) {
+                    val body = response.body?.string() ?: throw RuntimeException("body is null")
+                    try {
+                        callBack.onSuccess(gson.fromJson(body, Post::class.java))
+                    } catch (e: Exception) {
+                        callBack.onError()
+                    }
+                }
+
+                override fun onFailure(call: Call, e: IOException) {
+                    callBack.onError()
+                }
+            })
     }
 
-    override fun save(post: Post) {
+    override fun saveAsync(post: Post, callBack: PostRepository.RepositoryCallBack<Unit>) {
         val request: Request = Request.Builder()
             .post(gson.toJson(post).toRequestBody(jsonType))
             .url("${BASE_URL}/api/slow/posts")
             .build()
 
         client.newCall(request)
-            .execute()
-            .close()
+            .enqueue(object : Callback {
+                override fun onResponse(call: Call, response: Response) {
+                    try {
+                        callBack.onSuccess(Unit)
+                    } catch (e: Exception) {
+                        callBack.onError()
+                    }
+                }
+
+                override fun onFailure(call: Call, e: IOException) {
+                    callBack.onError()
+                }
+            })
     }
 
-    override fun removeById(id: Long) {
+    override fun removeByIdAsync(id: Long, callBack: PostRepository.RepositoryCallBack<Unit>) {
         val request: Request = Request.Builder()
             .delete()
             .url("${BASE_URL}/api/slow/posts/$id")
             .build()
 
         client.newCall(request)
-            .execute()
-            .close()
+            .enqueue(object : Callback {
+                override fun onResponse(call: Call, response: Response) {
+                    try {
+                        callBack.onSuccess(Unit)
+                    } catch (e: Exception) {
+                        callBack.onError()
+                    }
+                }
+
+                override fun onFailure(call: Call, e: IOException) {
+                    callBack.onError()
+                }
+            })
     }
 }
