@@ -66,13 +66,27 @@
         app:layout_constraintTop_toBottomOf="@id/barrierOverContent"
         tools:text="@sample/posts.json/data/content" />
 
+    <ImageView
+        android:id="@+id/image_attachment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/content"
+        />
+
+
+    <TextView
+        android:id="@+id/description_attachment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/image_attachment"
+        tools:ignore="MissingConstraints"/>
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrierOverLike"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="content" />
+        app:constraint_referenced_ids="content,image_attachment, description_attachment" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/like"

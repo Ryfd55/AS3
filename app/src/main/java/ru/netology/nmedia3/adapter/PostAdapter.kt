@@ -1,6 +1,7 @@
 package ru.netology.nmedia3.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
@@ -40,8 +41,13 @@ class PostViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(post: Post) {
-
         getAvatars(post, binding)
+        if (post.attachment != null) {
+            binding.imageAttachment.visibility = View.VISIBLE
+            getAttachment(post, binding)
+        } else {
+            binding.imageAttachment.visibility = View.GONE
+        }
         binding.apply {
             author.text = post.author
             published.text = post.published
@@ -60,12 +66,10 @@ class PostViewHolder(
                                 onInteractionListener.onRemove(post)
                                 true
                             }
-
                             R.id.edit -> {
                                 onInteractionListener.onEdit(post)
                                 true
                             }
-
                             else -> false
                         }
                     }
@@ -91,6 +95,16 @@ fun getAvatars(post: Post, binding: CardPostBinding) {
         .circleCrop()
         .timeout(10_000)
         .into(binding.avatar)
+}
+
+fun getAttachment(post: Post, binding: CardPostBinding) {
+    Glide.with(binding.imageAttachment)
+        .load("$BASE_URL/images/${post.attachment?.url}")
+        .placeholder(R.drawable.ic_loading_100dp)
+        .error(R.drawable.ic_error_100dp)
+        .timeout(10_000)
+        .into(binding.imageAttachment)
+    binding.descriptionAttachment.text = post.attachment?.description
 }
 
 class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
