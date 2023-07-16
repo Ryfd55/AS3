@@ -6,6 +6,7 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import ru.netology.nmedia3.R
 import ru.netology.nmedia3.databinding.CardPostBinding
 import ru.netology.nmedia3.dto.Post
@@ -16,6 +17,8 @@ interface OnInteractionListener {
     fun onRemove(post: Post) {}
     fun onShare(post: Post) {}
 }
+
+const val BASE_URL = "http://10.0.2.2:9999"
 
 class PostsAdapter(
     private val onInteractionListener: OnInteractionListener,
@@ -37,6 +40,8 @@ class PostViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(post: Post) {
+
+        getAvatars(post, binding)
         binding.apply {
             author.text = post.author
             published.text = post.published
@@ -44,6 +49,7 @@ class PostViewHolder(
             // в адаптере
             like.isChecked = post.likedByMe
             like.text = "${post.likes}"
+
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
@@ -54,6 +60,7 @@ class PostViewHolder(
                                 onInteractionListener.onRemove(post)
                                 true
                             }
+
                             R.id.edit -> {
                                 onInteractionListener.onEdit(post)
                                 true
@@ -74,6 +81,16 @@ class PostViewHolder(
             }
         }
     }
+}
+
+fun getAvatars(post: Post, binding: CardPostBinding) {
+    Glide.with(binding.avatar)
+        .load("$BASE_URL/avatars/${post.authorAvatar}")
+        .placeholder(R.drawable.ic_loading_100dp)
+        .error(R.drawable.ic_error_100dp)
+        .circleCrop()
+        .timeout(10_000)
+        .into(binding.avatar)
 }
 
 class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
