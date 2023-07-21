@@ -30,7 +30,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 _data.postValue(FeedModel(posts = value, empty = value.isEmpty()))
             }
 
-            override fun onError() {
+            override fun onError(e: Exception) {
                 _data.postValue(FeedModel(error = true))
             }
         })
@@ -38,12 +38,12 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun save() {
         edited.value?.let {
-            repository.saveAsync(it, object : PostRepository.RepositoryCallBack<Unit> {
-                override fun onSuccess(value: Unit) {
+            repository.saveAsync(it, object : PostRepository.RepositoryCallBack<Post> {
+                override fun onSuccess(value: Post) {
                     _postCreated.postValue(Unit)
                 }
 
-                override fun onError() {
+                override fun onError(e: Exception) {
                     _data.postValue(FeedModel(error = true))
                 }
             })
@@ -75,7 +75,24 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 )
             }
 
-            override fun onError() {
+            override fun onError(e: Exception) {
+                _data.postValue(FeedModel(error = true))
+            }
+        })
+    }
+
+    fun disLikeById(id: Long) {
+        val post = data.value?.posts?.find { it.id == id } ?: empty
+        repository.disLikeByIdAsync(post, object : PostRepository.RepositoryCallBack<Post> {
+            override fun onSuccess(value: Post) {
+                _data.postValue(
+                    _data.value?.copy(
+                        posts = _data.value?.posts.orEmpty()
+                            .map { if (it.id == id) value else it })
+                )
+            }
+
+            override fun onError(e: Exception) {
                 _data.postValue(FeedModel(error = true))
             }
         })
@@ -90,7 +107,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 )
             }
 
-            override fun onError() {
+            override fun onError(e: Exception) {
                 _data.postValue(FeedModel(error = true))
             }
         })
