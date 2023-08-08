@@ -18,6 +18,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
         get() = _postCreated
+    private val _requestCode = MutableLiveData<Int>()
+    val requestCode: LiveData<Int> = _requestCode
 
     init {
         loadPosts()
@@ -30,8 +32,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 _data.postValue(FeedModel(posts = value, empty = value.isEmpty()))
             }
 
-            override fun onError(e: Exception) {
+            override fun onError(e: Exception, requestCode: Int) {
                 _data.postValue(FeedModel(error = true))
+                _requestCode.value = requestCode
             }
         })
     }
@@ -43,8 +46,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                     _postCreated.postValue(Unit)
                 }
 
-                override fun onError(e: Exception) {
+                override fun onError(e: Exception, requestCode: Int) {
                     _data.postValue(FeedModel(error = true))
+                    _requestCode.value = requestCode
                 }
             })
 
@@ -75,8 +79,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 )
             }
 
-            override fun onError(e: Exception) {
+            override fun onError(e: Exception, requestCode: Int) {
                 _data.postValue(FeedModel(error = true))
+                _requestCode.value = requestCode
             }
         })
     }
@@ -92,8 +97,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 )
             }
 
-            override fun onError(e: Exception) {
+            override fun onError(e: Exception, requestCode: Int) {
                 _data.postValue(FeedModel(error = true))
+                _requestCode.value = requestCode
             }
         })
     }
@@ -107,8 +113,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 )
             }
 
-            override fun onError(e: Exception) {
+            override fun onError(e: Exception, requestCode: Int) {
                 _data.postValue(FeedModel(error = true))
+                _requestCode.value = requestCode
             }
         })
     }

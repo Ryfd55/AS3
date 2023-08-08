@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -33,9 +34,11 @@ class FeedFragment : Fragment() {
             }
 
             override fun onLike(post: Post) {
-                if (post.likedByMe){
+                if (post.likedByMe) {
                     viewModel.disLikeById(post.id)
-                } else {viewModel.likeById(post.id)}
+                } else {
+                    viewModel.likeById(post.id)
+                }
             }
 
             override fun onRemove(post: Post) {
@@ -60,6 +63,18 @@ class FeedFragment : Fragment() {
             binding.progress.isVisible = state.loading
             binding.errorGroup.isVisible = state.error
             binding.emptyText.isVisible = state.empty
+//            if (it is FeedModelState.Error) {
+//            Snackbar.make(binding.root, R.string.error_loading, Snackbar.LENGTH_LONG)
+//                .setAction(R.string.retry_loading) { viewModel.loadPosts() }
+//                .show()
+//        }
+//            if (state is FeedModelState.Idle) {
+//                Toast.makeText(context, R.string.on_success, Toast.LENGTH_SHORT).show()
+//            }
+        }
+
+        viewModel.requestCode.observe(viewLifecycleOwner) { requestCode ->
+            errorToast(requestCode)
         }
 
         binding.retryButton.setOnClickListener {
@@ -76,5 +91,20 @@ class FeedFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun errorToast(requestCode: Int) {
+        if (requestCode.toString().startsWith("1")) {
+            Toast.makeText(context, "Информационный код ответа", Toast.LENGTH_SHORT).show()
+        }
+        if (requestCode.toString().startsWith("3")) {
+            Toast.makeText(context, "Перенаправление", Toast.LENGTH_SHORT).show()
+        }
+        if (requestCode.toString().startsWith("4")) {
+            Toast.makeText(context, "Ошибка клиента", Toast.LENGTH_SHORT).show()
+        }
+        if (requestCode.toString().startsWith("5")) {
+            Toast.makeText(context, "Ошибка сервера", Toast.LENGTH_SHORT).show()
+        }
     }
 }
