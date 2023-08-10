@@ -12,14 +12,17 @@ class PostRepositoryImpl : PostRepository {
         PostsApi.retrofitService.getAll().enqueue(object : Callback<List<Post>> {
             override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
                 if (!response.isSuccessful) {
-                    callBack.onError(RuntimeException(response.errorBody()?.string()), response.code())
+                    callBack.onError(
+                        RuntimeException(response.errorBody()?.string()),
+                        response.code()
+                    )
                     return
                 }
                 callBack.onSuccess(response.body() ?: throw RuntimeException("body is empty"))
             }
 
             override fun onFailure(call: Call<List<Post>>, t: Throwable) {
-                callBack.onError(Exception(t),404)
+                callBack.onError(Exception(t), 404)
             }
         })
     }
@@ -28,14 +31,17 @@ class PostRepositoryImpl : PostRepository {
         PostsApi.retrofitService.removeById(id).enqueue(object : Callback<Unit> {
             override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
                 if (!response.isSuccessful) {
-                    callBack.onError(RuntimeException(response.errorBody()?.string()), response.code())
+                    callBack.onError(
+                        RuntimeException(response.errorBody()?.string()),
+                        response.code()
+                    )
                     return
                 }
                 callBack.onSuccess(Unit)
             }
 
             override fun onFailure(call: Call<Unit>, t: Throwable) {
-                callBack.onError(Exception(t),404)
+                callBack.onError(Exception(t), 404)
             }
         })
     }
@@ -44,14 +50,17 @@ class PostRepositoryImpl : PostRepository {
         PostsApi.retrofitService.save(post).enqueue(object : Callback<Post> {
             override fun onResponse(call: Call<Post>, response: Response<Post>) {
                 if (!response.isSuccessful) {
-                    callBack.onError(RuntimeException(response.errorBody()?.string()), response.code())
+                    callBack.onError(
+                        RuntimeException(response.errorBody()?.string()),
+                        response.code()
+                    )
                     return
                 }
                 callBack.onSuccess(response.body() ?: throw RuntimeException("body is empty"))
             }
 
             override fun onFailure(call: Call<Post>, t: Throwable) {
-                callBack.onError(Exception(t),404)
+                callBack.onError(Exception(t), 404)
             }
         })
     }
@@ -62,14 +71,17 @@ class PostRepositoryImpl : PostRepository {
             .enqueue(object : Callback<Post> {
                 override fun onResponse(call: Call<Post>, response: Response<Post>) {
                     if (!response.isSuccessful) {
-                        callBack.onError(RuntimeException(response.errorBody()?.string()), response.code())
+                        callBack.onError(
+                            RuntimeException(response.errorBody()?.string()),
+                            response.code()
+                        )
                         return
                     }
                     callBack.onSuccess(response.body() ?: throw RuntimeException("body is empty"))
                 }
 
                 override fun onFailure(call: Call<Post>, t: Throwable) {
-                    callBack.onError(Exception(t),404)
+                    callBack.onError(Exception(t), 404)
                 }
             })
     }
@@ -79,14 +91,17 @@ class PostRepositoryImpl : PostRepository {
             .enqueue(object : Callback<Post> {
                 override fun onResponse(call: Call<Post>, response: Response<Post>) {
                     if (!response.isSuccessful) {
-                        callBack.onError(RuntimeException(response.errorBody()?.string()), response.code())
+                        callBack.onError(
+                            RuntimeException(response.errorBody()?.string()),
+                            response.code()
+                        )
                         return
                     }
                     callBack.onSuccess(response.body() ?: throw RuntimeException("body is empty"))
                 }
 
                 override fun onFailure(call: Call<Post>, t: Throwable) {
-                    callBack.onError(Exception(t),404)
+                    callBack.onError(Exception(t), 404)
                 }
             })
     }
