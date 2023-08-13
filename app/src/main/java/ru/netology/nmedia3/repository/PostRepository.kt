@@ -9,6 +9,7 @@ interface PostRepository {
     fun disLikeByIdAsync(post: Post, callBack: RepositoryCallBack<Post>)
     fun saveAsync(post: Post, callBack: RepositoryCallBack<Post>)
     fun removeByIdAsync(id: Long, callBack: RepositoryCallBack<Unit>)
+//    fun edit(post: Post, callback: RepositoryCallBack<Post>)
 
     interface RepositoryCallBack<T> {
         fun onSuccess(value: T)

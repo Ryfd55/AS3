@@ -40,10 +40,14 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun save() {
-        edited.value?.let {
-            repository.saveAsync(it, object : PostRepository.RepositoryCallBack<Post> {
+        edited.value?.let { editedPost ->
+            val newStatePosts = _data.value?.posts.orEmpty()
+                .map { if (it.id == editedPost.id) editedPost else it }
+            repository.saveAsync(editedPost, object : PostRepository.RepositoryCallBack<Post> {
                 override fun onSuccess(value: Post) {
+                    _data.postValue(FeedModel(posts = newStatePosts, onSuccess = true, onFailure = false))
                     _postCreated.postValue(Unit)
+                    loadPosts()
                 }
 
                 override fun onError(e: Exception, requestCode: Int) {
@@ -51,13 +55,25 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                     _requestCode.value = requestCode
                 }
             })
-
         }
-        edited.value = empty
-    }
 
-    fun edit(post: Post) {
-        edited.value = post
+//    fun save() {
+//        edited.value?.let { editedPost ->
+//            val newStatePosts = _data.value?.posts.orEmpty()
+//                .map { if (it.id == editedPost.id) editedPost else it }
+//            repository.saveAsync(editedPost, object : PostRepository.RepositoryCallBack<Post> {
+//                override fun onSuccess(value: Post) {
+//                    _postCreated.postValue(Unit)
+//                    _data.postValue(FeedModel(posts = newStatePosts, onSuccess = true, onFailure = false))
+//                }
+//
+//                                override fun onError(e: Exception, requestCode: Int) {
+//                    _data.postValue(FeedModel(error = true))
+//                    _requestCode.value = requestCode
+//                }
+//            })
+//        }
+        edited.value = empty
     }
 
     fun changeContent(content: String) {
@@ -118,5 +134,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 _requestCode.value = requestCode
             }
         })
+    }
+
+    fun edit(post: Post) {
+        edited.value = post
     }
 }

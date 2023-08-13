@@ -105,5 +105,9 @@ class PostRepositoryImpl : PostRepository {
                 }
             })
     }
+
+//    override fun edit(post: Post, callback: PostRepository.RepositoryCallBack<Post>) {
+//        saveAsync(post, callback)
+//    }
 }
 

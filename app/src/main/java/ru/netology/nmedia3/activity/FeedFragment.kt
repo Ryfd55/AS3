@@ -26,12 +26,12 @@ class FeedFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentFeedBinding.inflate(inflater, container, false)
+        val binding = FragmentFeedBinding.inflate(inflater,
+            container,
+            false
+        )
 
         val adapter = PostsAdapter(object : OnInteractionListener {
-            override fun onEdit(post: Post) {
-                viewModel.edit(post)
-            }
 
             override fun onLike(post: Post) {
                 if (post.likedByMe) {
@@ -43,6 +43,14 @@ class FeedFragment : Fragment() {
 
             override fun onRemove(post: Post) {
                 viewModel.removeById(post.id)
+            }
+
+            override fun onEdit(post: Post) {
+                viewModel.edit(post)
+                val text = post.content
+                val bundle = Bundle()
+                bundle.putString("editedText", text)
+                findNavController().navigate(R.id.action_feedFragment_to_editPostFragment, bundle)
             }
 
             override fun onShare(post: Post) {
@@ -63,14 +71,6 @@ class FeedFragment : Fragment() {
             binding.progress.isVisible = state.loading
             binding.errorGroup.isVisible = state.error
             binding.emptyText.isVisible = state.empty
-//            if (it is FeedModelState.Error) {
-//            Snackbar.make(binding.root, R.string.error_loading, Snackbar.LENGTH_LONG)
-//                .setAction(R.string.retry_loading) { viewModel.loadPosts() }
-//                .show()
-//        }
-//            if (state is FeedModelState.Idle) {
-//                Toast.makeText(context, R.string.on_success, Toast.LENGTH_SHORT).show()
-//            }
         }
 
         viewModel.requestCode.observe(viewLifecycleOwner) { requestCode ->
