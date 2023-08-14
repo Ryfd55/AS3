@@ -1,7 +1,9 @@
 package ru.netology.nmedia3.viewmodel
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.*
+import ru.netology.nmedia3.R
 import ru.netology.nmedia3.dto.Post
 import ru.netology.nmedia3.model.FeedModel
 import ru.netology.nmedia3.util.SingleLiveEvent
@@ -96,8 +98,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             }
 
             override fun onError(e: Exception, requestCode: Int) {
-                _data.postValue(FeedModel(error = true))
-                _requestCode.value = requestCode
+                Toast.makeText(getApplication(), R.string.error_loading, Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -114,8 +115,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             }
 
             override fun onError(e: Exception, requestCode: Int) {
-                _data.postValue(FeedModel(error = true))
-                _requestCode.value = requestCode
+                Toast.makeText(getApplication(), R.string.error_loading, Toast.LENGTH_LONG).show()
             }
         })
     }

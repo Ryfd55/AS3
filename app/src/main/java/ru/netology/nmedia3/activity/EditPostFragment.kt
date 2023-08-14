@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia3.R
 import ru.netology.nmedia3.databinding.FragmentEditPostBinding
@@ -21,9 +21,7 @@ class EditPostFragment : Fragment() {
         var Bundle.edit: String? by StringArg
     }
 
-    private val viewModel: PostViewModel by viewModels(
-        ownerProducer = ::requireParentFragment
-    )
+    private val viewModel: PostViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +49,6 @@ class EditPostFragment : Fragment() {
             } else {
                 viewModel.changeContent(binding.editText.text.toString())
                 viewModel.save()
-//                AndroidUtils.hideKeyboard(requireView())
                 findNavController().navigateUp()
             }
 

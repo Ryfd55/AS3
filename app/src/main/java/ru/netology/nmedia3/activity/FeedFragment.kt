@@ -95,16 +95,16 @@ class FeedFragment : Fragment() {
 
     private fun errorToast(requestCode: Int) {
         if (requestCode.toString().startsWith("1")) {
-            Toast.makeText(context, "Информационный код ответа", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Информационный код ответа", Toast.LENGTH_LONG).show()
         }
         if (requestCode.toString().startsWith("3")) {
-            Toast.makeText(context, "Перенаправление", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Перенаправление", Toast.LENGTH_LONG).show()
         }
         if (requestCode.toString().startsWith("4")) {
-            Toast.makeText(context, "Ошибка клиента", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Ошибка клиента", Toast.LENGTH_LONG).show()
         }
         if (requestCode.toString().startsWith("5")) {
-            Toast.makeText(context, "Ошибка сервера", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Ошибка сервера", Toast.LENGTH_LONG).show()
         }
     }
 }
