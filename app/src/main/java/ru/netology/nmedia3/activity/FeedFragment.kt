@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -25,19 +26,31 @@ class FeedFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentFeedBinding.inflate(inflater, container, false)
+        val binding = FragmentFeedBinding.inflate(inflater,
+            container,
+            false
+        )
 
         val adapter = PostsAdapter(object : OnInteractionListener {
-            override fun onEdit(post: Post) {
-                viewModel.edit(post)
-            }
 
             override fun onLike(post: Post) {
-                viewModel.likeById(post.id)
+                if (post.likedByMe) {
+                    viewModel.disLikeById(post.id)
+                } else {
+                    viewModel.likeById(post.id)
+                }
             }
 
             override fun onRemove(post: Post) {
                 viewModel.removeById(post.id)
+            }
+
+            override fun onEdit(post: Post) {
+                viewModel.edit(post)
+                val text = post.content
+                val bundle = Bundle()
+                bundle.putString("editedText", text)
+                findNavController().navigate(R.id.action_feedFragment_to_editPostFragment, bundle)
             }
 
             override fun onShare(post: Post) {
@@ -60,6 +73,10 @@ class FeedFragment : Fragment() {
             binding.emptyText.isVisible = state.empty
         }
 
+        viewModel.requestCode.observe(viewLifecycleOwner) { requestCode ->
+            errorToast(requestCode)
+        }
+
         binding.retryButton.setOnClickListener {
             viewModel.loadPosts()
         }
@@ -74,5 +91,20 @@ class FeedFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun errorToast(requestCode: Int) {
+        if (requestCode.toString().startsWith("1")) {
+            Toast.makeText(context, "Информационный код ответа", Toast.LENGTH_LONG).show()
+        }
+        if (requestCode.toString().startsWith("3")) {
+            Toast.makeText(context, "Перенаправление", Toast.LENGTH_LONG).show()
+        }
+        if (requestCode.toString().startsWith("4")) {
+            Toast.makeText(context, "Ошибка клиента", Toast.LENGTH_LONG).show()
+        }
+        if (requestCode.toString().startsWith("5")) {
+            Toast.makeText(context, "Ошибка сервера", Toast.LENGTH_LONG).show()
+        }
     }
 }

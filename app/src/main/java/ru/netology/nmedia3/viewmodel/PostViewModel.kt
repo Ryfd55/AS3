@@ -1,7 +1,9 @@
 package ru.netology.nmedia3.viewmodel
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.*
+import ru.netology.nmedia3.R
 import ru.netology.nmedia3.dto.Post
 import ru.netology.nmedia3.model.FeedModel
 import ru.netology.nmedia3.util.SingleLiveEvent
@@ -18,6 +20,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
         get() = _postCreated
+    private val _requestCode = MutableLiveData<Int>()
+    val requestCode: LiveData<Int> = _requestCode
 
     init {
         loadPosts()
@@ -30,30 +34,48 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 _data.postValue(FeedModel(posts = value, empty = value.isEmpty()))
             }
 
-            override fun onError() {
+            override fun onError(e: Exception, requestCode: Int) {
                 _data.postValue(FeedModel(error = true))
+                _requestCode.value = requestCode
             }
         })
     }
 
     fun save() {
-        edited.value?.let {
-            repository.saveAsync(it, object : PostRepository.RepositoryCallBack<Unit> {
-                override fun onSuccess(value: Unit) {
+        edited.value?.let { editedPost ->
+            val newStatePosts = _data.value?.posts.orEmpty()
+                .map { if (it.id == editedPost.id) editedPost else it }
+            repository.saveAsync(editedPost, object : PostRepository.RepositoryCallBack<Post> {
+                override fun onSuccess(value: Post) {
+                    _data.postValue(FeedModel(posts = newStatePosts, onSuccess = true, onFailure = false))
                     _postCreated.postValue(Unit)
+                    loadPosts()
                 }
 
-                override fun onError() {
+                override fun onError(e: Exception, requestCode: Int) {
                     _data.postValue(FeedModel(error = true))
+                    _requestCode.value = requestCode
                 }
             })
-
         }
-        edited.value = empty
-    }
 
-    fun edit(post: Post) {
-        edited.value = post
+//    fun save() {
+//        edited.value?.let { editedPost ->
+//            val newStatePosts = _data.value?.posts.orEmpty()
+//                .map { if (it.id == editedPost.id) editedPost else it }
+//            repository.saveAsync(editedPost, object : PostRepository.RepositoryCallBack<Post> {
+//                override fun onSuccess(value: Post) {
+//                    _postCreated.postValue(Unit)
+//                    _data.postValue(FeedModel(posts = newStatePosts, onSuccess = true, onFailure = false))
+//                }
+//
+//                                override fun onError(e: Exception, requestCode: Int) {
+//                    _data.postValue(FeedModel(error = true))
+//                    _requestCode.value = requestCode
+//                }
+//            })
+//        }
+        edited.value = empty
     }
 
     fun changeContent(content: String) {
@@ -75,8 +97,25 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 )
             }
 
-            override fun onError() {
-                _data.postValue(FeedModel(error = true))
+            override fun onError(e: Exception, requestCode: Int) {
+                Toast.makeText(getApplication(), R.string.error_loading, Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+
+    fun disLikeById(id: Long) {
+        val post = data.value?.posts?.find { it.id == id } ?: empty
+        repository.disLikeByIdAsync(post, object : PostRepository.RepositoryCallBack<Post> {
+            override fun onSuccess(value: Post) {
+                _data.postValue(
+                    _data.value?.copy(
+                        posts = _data.value?.posts.orEmpty()
+                            .map { if (it.id == id) value else it })
+                )
+            }
+
+            override fun onError(e: Exception, requestCode: Int) {
+                Toast.makeText(getApplication(), R.string.error_loading, Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -90,9 +129,14 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 )
             }
 
-            override fun onError() {
+            override fun onError(e: Exception, requestCode: Int) {
                 _data.postValue(FeedModel(error = true))
+                _requestCode.value = requestCode
             }
         })
+    }
+
+    fun edit(post: Post) {
+        edited.value = post
     }
 }

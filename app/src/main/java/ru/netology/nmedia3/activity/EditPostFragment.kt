@@ -5,19 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia3.R
-import ru.netology.nmedia3.databinding.FragmentNewPostBinding
+import ru.netology.nmedia3.databinding.FragmentEditPostBinding
 import ru.netology.nmedia3.util.AndroidUtils
 import ru.netology.nmedia3.util.StringArg
 import ru.netology.nmedia3.viewmodel.PostViewModel
 
-class NewPostFragment : Fragment() {
+class EditPostFragment : Fragment() {
 
     companion object {
-        var Bundle.textArg: String? by StringArg
+        var Bundle.edit: String? by StringArg
     }
 
     private val viewModel: PostViewModel by activityViewModels()
@@ -27,29 +28,36 @@ class NewPostFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentNewPostBinding.inflate(
+        val binding = FragmentEditPostBinding.inflate(
             inflater,
             container,
             false
         )
 
-        arguments?.textArg
-            ?.let(binding.editContent::setText)
+        arguments?.edit?.let(binding.editText::setText)
+        binding.editText.setText(arguments?.getString("editedText"))
+
 
         binding.ok.setOnClickListener {
-            if (binding.editContent.text.isNullOrBlank()) {
+            if (binding.editText.text.isNullOrBlank()) {
                 Toast.makeText(
                     activity,
                     this.getString(R.string.error_empty_content),
-                    Toast.LENGTH_SHORT)
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             } else {
-                viewModel.changeContent(binding.editContent.text.toString())
+                viewModel.changeContent(binding.editText.text.toString())
                 viewModel.save()
-                AndroidUtils.hideKeyboard(requireView())
                 findNavController().navigateUp()
             }
+
+            AndroidUtils.hideKeyboard(requireView())
+            binding.ok.isVisible = false
+            binding.editText.isVisible = false
+            binding.savingProgressBar.isVisible = true
         }
+
         return binding.root
     }
 }
