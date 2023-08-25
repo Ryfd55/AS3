@@ -34,11 +34,7 @@ class FeedFragment : Fragment() {
         val adapter = PostsAdapter(object : OnInteractionListener {
 
             override fun onLike(post: Post) {
-                if (post.likedByMe) {
-                    viewModel.disLikeById(post.id)
-                } else {
-                    viewModel.likeById(post.id)
-                }
+                viewModel.likeById(post)
             }
 
             override fun onRemove(post: Post) {
@@ -66,11 +62,13 @@ class FeedFragment : Fragment() {
             }
         })
         binding.list.adapter = adapter
-        viewModel.data.observe(viewLifecycleOwner) { state ->
-            adapter.submitList(state.posts)
+        viewModel.state.observe(viewLifecycleOwner) { state ->
             binding.progress.isVisible = state.loading
             binding.errorGroup.isVisible = state.error
-            binding.emptyText.isVisible = state.empty
+        }
+        viewModel.data.observe(viewLifecycleOwner){
+            binding.emptyText.isVisible = it.empty
+            adapter.submitList(it.posts)
         }
 
         viewModel.requestCode.observe(viewLifecycleOwner) { requestCode ->
