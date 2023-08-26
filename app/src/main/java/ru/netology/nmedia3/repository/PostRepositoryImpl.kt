@@ -16,11 +16,11 @@ class PostRepositoryImpl(
     }
 
     override suspend fun getAll() {
-            val response = PostsApi.retrofitService.getAll()
-                    if (!response.isSuccessful) {
-                        throw RuntimeException(response.message())
-                    }
-                    val posts = response.body() ?: throw RuntimeException("body is empty")
+        val response = PostsApi.retrofitService.getAll()
+        if (!response.isSuccessful) {
+            throw RuntimeException(response.message())
+        }
+        val posts = response.body() ?: throw RuntimeException("body is empty")
         dao.insert(posts.map(PostEntity::fromDto))
 
     }
