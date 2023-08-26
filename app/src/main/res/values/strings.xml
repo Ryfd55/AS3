@@ -22,4 +22,5 @@
     <string name="empty_posts" translatable="false">There are no posts.\nIf you create a new post, it will appear here</string>
     <string name="error_loading" translatable="false">Something went wrong. Try again later</string>
     <string name="google_play_unavailable" translatable="false">Google Api Unavailable</string>
+    <string name="fab" translatable="false">FAB</string>
 </resources>

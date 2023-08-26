@@ -38,11 +38,9 @@ class PostRepositoryImpl(
         TODO("Not yet implemented")
     }
 
-    override suspend fun removeByIdAsync(id: Long) {
+    override suspend fun removeById(id: Long) {
         TODO("Not yet implemented")
     }
-
-
 }
 
 
