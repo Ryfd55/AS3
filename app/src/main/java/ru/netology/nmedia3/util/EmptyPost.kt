@@ -5,10 +5,11 @@ import ru.netology.nmedia3.dto.Post
 object EmptyPost {
     val empty = Post(
         id = 0,
-        content = "",
         author = "",
-        likes = 0,
+        authorAvatar = "",
+        content = "",
+        published = "",
         likedByMe = false,
-        published = ""
+        likes = 0
     )
 }

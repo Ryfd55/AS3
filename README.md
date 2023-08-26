@@ -6,5 +6,6 @@ _stacks:_
 3. Room
 4. Firebase
 5. Retrofit
+6. Coroutines
 
 ![photo](https://raw.githubusercontent.com/netology-code/andad-homeworks/master/04_recycler/pic/separators.png)
