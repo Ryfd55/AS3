@@ -9,7 +9,7 @@ interface PostRepository {
     suspend fun likeById(post: Post): Post
     suspend fun disLikeById(post: Post): Post
     suspend fun save(post: Post): Post
-    suspend fun removeByIdAsync(id: Long)
+    suspend fun removeById(id: Long)
 
 
 }

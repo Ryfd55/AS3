@@ -1,10 +1,8 @@
 package ru.netology.nmedia3.viewmodel
 
 import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
-import ru.netology.nmedia3.R
 import ru.netology.nmedia3.db.AppDb
 import ru.netology.nmedia3.dto.Post
 import ru.netology.nmedia3.model.FeedModel
@@ -48,6 +46,18 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun refresh() {
+        viewModelScope.launch {
+            _state.value = FeedModelState(refreshing = true)
+            try {
+                repository.getAll()
+                _state.value = FeedModelState()
+            } catch (e: Exception) {
+                _state.value = FeedModelState(error = true)
+            }
+        }
+    }
+
     fun save() {
         viewModelScope.launch {
             edited.value?.let {
@@ -80,12 +90,13 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun removeById(id: Long) {
         viewModelScope.launch {
-        repository.removeByIdAsync(id)
-            }
-
+            repository.removeById(id)
+        }
     }
 
     fun edit(post: Post) {
         edited.value = post
     }
+
+
 }
