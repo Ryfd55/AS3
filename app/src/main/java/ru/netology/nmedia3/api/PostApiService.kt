@@ -49,7 +49,7 @@ interface PostsApiService {
 }
 
 object PostsApi {
-    val retrofitService: PostsApiService by lazy {
+    val service: PostsApiService by lazy {
         retrofit.create()
     }
 }
