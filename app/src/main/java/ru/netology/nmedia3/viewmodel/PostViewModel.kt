@@ -2,6 +2,7 @@ package ru.netology.nmedia3.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.netology.nmedia3.db.AppDb
 import ru.netology.nmedia3.dto.Post
@@ -11,6 +12,7 @@ import ru.netology.nmedia3.util.SingleLiveEvent
 import ru.netology.nmedia3.repository.PostRepository
 import ru.netology.nmedia3.repository.PostRepositoryImpl
 import ru.netology.nmedia3.util.EmptyPost.empty
+import kotlinx.coroutines.flow.map
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: PostRepository = PostRepositoryImpl(
@@ -20,8 +22,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     val state: LiveData<FeedModelState>
         get() = _state
     val data: LiveData<FeedModel> = repository.data.map {
-        FeedModel(posts = it, empty = it.isEmpty())
-    }
+        FeedModel(posts = it, empty = it.isEmpty())}
+        .asLiveData(Dispatchers.Default)
+
 
     val edited = MutableLiveData(empty)
     private val _postCreated = SingleLiveEvent<Unit>()
@@ -29,6 +32,12 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         get() = _postCreated
     private val _requestCode = MutableLiveData<Int>()
     val requestCode: LiveData<Int> = _requestCode
+
+    val newerCount: LiveData<Int> = data.switchMap {
+        val id = it.posts.firstOrNull()?.id ?: 0L
+        repository.getNewerCount(id)
+            .asLiveData(Dispatchers.Default)
+    }
 
     init {
         loadPosts()
