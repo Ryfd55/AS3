@@ -12,14 +12,11 @@ interface PostDao {
     @Query("SELECT * FROM PostEntity ORDER BY id DESC")
     fun getAll(): Flow<List<PostEntity>>
 
-    @Query("SELECT * FROM PostEntity WHERE hidden = 0 ORDER BY id DESC")
+    @Query("SELECT * FROM PostEntity WHERE hidden = 1 ORDER BY id DESC")
     fun getAllVisible(): Flow<List<PostEntity>>
 
     @Query("SELECT COUNT(*) == 0 FROM PostEntity")
     suspend fun isEmpty(): Boolean
-
-    @Query("SELECT COUNT(*) FROM PostEntity WHERE hidden = 1")
-    suspend fun newerCount(): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(post: PostEntity)
@@ -43,4 +40,7 @@ interface PostDao {
 
     @Query("DELETE FROM PostEntity WHERE id = :id")
     suspend fun removeById(id: Long)
+
+    @Query("UPDATE PostEntity SET hidden = 0")
+    suspend fun updateShownStatus()
 }

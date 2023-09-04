@@ -28,7 +28,8 @@ class FeedFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentFeedBinding.inflate(inflater,
+        val binding = FragmentFeedBinding.inflate(
+            inflater,
             container,
             false
         )
@@ -67,17 +68,54 @@ class FeedFragment : Fragment() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             binding.progress.isVisible = state.loading
             binding.swiperefresh.isRefreshing = state.refreshing
-            if (state.error){
-                Snackbar.make(binding.root,R.string.error_loading, Snackbar.LENGTH_LONG)
-                    .setAction(R.string.retry_loading){
+            if (state.error) {
+                Snackbar.make(binding.root, R.string.error_loading, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.retry_loading) {
                         viewModel.loadPosts()
                     }
                     .show()
             }
         }
-        viewModel.data.observe(viewLifecycleOwner){
-            binding.emptyText.isVisible = it.empty
-            adapter.submitList(it.posts)
+
+        viewModel.data.observe(viewLifecycleOwner) { state ->
+            val newPost = state.posts.size>adapter.currentList.size
+            adapter.submitList(state.posts){
+                if (newPost) binding.list.smoothScrollToPosition(0)
+            }
+            binding.emptyText.isVisible = state.empty
+
+        }
+        viewModel.state.observe(viewLifecycleOwner){ state ->
+            binding.progress.isVisible = state.loading
+            if (state.error){
+                Snackbar.make(binding.root, R.string.error_loading, Snackbar.LENGTH_LONG).setAction(R.string.retry_loading){
+                    viewModel.refresh()
+                }
+                    .show()
+            }
+        }
+
+//        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+//            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+//                if (positionStart == 0) {
+//                    binding.list.smoothScrollToPosition(0)
+//                }
+//            }
+//        })
+
+        viewModel.newerCount.observe(viewLifecycleOwner) { state ->
+            if (state != 0){
+                val btnText = "Новая запись ($state)"
+                binding.newerPostsBtn.text = btnText
+                binding.newerPostsBtn.visibility = View.VISIBLE
+            }
+            println("state: $state")
+        }
+
+        binding.newerPostsBtn.setOnClickListener {
+            viewModel.loadPosts()
+            viewModel.updateShownStatus()
+            it.visibility = View.GONE
         }
 
         viewModel.requestCode.observe(viewLifecycleOwner) { requestCode ->
@@ -97,11 +135,9 @@ class FeedFragment : Fragment() {
             viewModel.refresh()
         }
 
-viewModel.newerCount.observe(viewLifecycleOwner){
-
-    Log.d("FeedFragment", "newer count: $it")
-
-}
+        viewModel.newerCount.observe(viewLifecycleOwner) {
+            Log.d("FeedFragment", "newer count: $it")
+        }
 
         return binding.root
     }

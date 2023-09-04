@@ -3,6 +3,7 @@ package ru.netology.nmedia3.viewmodel
 import android.app.Application
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import ru.netology.nmedia3.db.AppDb
 import ru.netology.nmedia3.dto.Post
@@ -18,6 +19,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: PostRepository = PostRepositoryImpl(
         AppDb.getInstance(application).postDao()
     )
+    private val scope = MainScope()
     private val _state = MutableLiveData(FeedModelState())
     val state: LiveData<FeedModelState>
         get() = _state
@@ -110,5 +112,11 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun edit(post: Post) {
         edited.value = post
+    }
+
+    fun updateShownStatus(){
+        viewModelScope.launch {
+            repository.updateShownStatus()
+        }
     }
 }

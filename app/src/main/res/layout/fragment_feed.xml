@@ -11,6 +11,17 @@
         android:background="@color/edit_gray"
         tools:context=".activity.FeedFragment">
 
+        <Button
+            android:id="@+id/newerPostsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/new_posts"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/common_spacing"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/retryTitle"
             android:layout_width="wrap_content"

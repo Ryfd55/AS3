@@ -10,6 +10,7 @@ object EmptyPost {
         content = "",
         published = "",
         likedByMe = false,
-        likes = 0
+        likes = 0,
+        hidden = false
     )
 }
