@@ -3,7 +3,6 @@ package ru.netology.nmedia3.repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -12,7 +11,6 @@ import ru.netology.nmedia3.Entity.toDto
 import ru.netology.nmedia3.Entity.toEntity
 import ru.netology.nmedia3.api.PostsApi
 import ru.netology.nmedia3.appError.ApiError
-import ru.netology.nmedia3.appError.AppError
 import ru.netology.nmedia3.appError.NetworkError
 import ru.netology.nmedia3.appError.UnknownError
 import ru.netology.nmedia3.dao.PostDao
@@ -23,7 +21,13 @@ class PostRepositoryImpl(
     private val dao: PostDao
 ) : PostRepository {
 
+    private val newerPostsId = mutableListOf<Long>()
     override val data: Flow<List<Post>> = dao.getAll()
+        .map {
+        it.filter { postEntity ->
+            !postEntity.hidden
+        }
+    }
         .map(List<PostEntity>::toDto)
         .flowOn(Dispatchers.Default)
 
@@ -35,14 +39,14 @@ class PostRepositoryImpl(
                 throw ApiError(response.code(), response.message())
             }
             val posts = response.body() ?: throw ApiError(response.code(), response.message())
-            for (i in posts){
-                i.hidden = false
+            dao.insert(posts.toEntity(hidden = true))
+            posts.forEach {
+                newerPostsId.add(it.id)
             }
             emit(posts.size)
         }
     }
-        .catch { e -> throw AppError.from(e) }
-        .flowOn(Dispatchers.Default)
+
     override suspend fun getAll() {
         try {
             val response = PostsApi.service.getAll()

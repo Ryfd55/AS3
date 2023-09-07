@@ -23,4 +23,5 @@
     <string name="error_loading" translatable="false">Something went wrong. Try again later</string>
     <string name="google_play_unavailable" translatable="false">Google Api Unavailable</string>
     <string name="fab" translatable="false">FAB</string>
+    <string name="new_posts" translatable="false">New posts</string>
 </resources>

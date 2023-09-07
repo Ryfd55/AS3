@@ -11,13 +11,18 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ru.netology.nmedia3.R
 import ru.netology.nmedia3.adapter.OnInteractionListener
 import ru.netology.nmedia3.adapter.PostsAdapter
 import ru.netology.nmedia3.databinding.FragmentFeedBinding
 import ru.netology.nmedia3.dto.Post
 import ru.netology.nmedia3.viewmodel.PostViewModel
+import kotlin.coroutines.EmptyCoroutineContext
 
 class FeedFragment : Fragment() {
 
@@ -95,13 +100,13 @@ class FeedFragment : Fragment() {
             }
         }
 
-//        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-//            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-//                if (positionStart == 0) {
-//                    binding.list.smoothScrollToPosition(0)
-//                }
-//            }
-//        })
+        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                if (positionStart == 0) {
+                    binding.list.smoothScrollToPosition(0)
+                }
+            }
+        })
 
         viewModel.newerCount.observe(viewLifecycleOwner) { state ->
             if (state != 0){
@@ -113,8 +118,13 @@ class FeedFragment : Fragment() {
         }
 
         binding.newerPostsBtn.setOnClickListener {
-            viewModel.loadPosts()
-            viewModel.updateShownStatus()
+            CoroutineScope(EmptyCoroutineContext).launch{
+                launch {
+                    viewModel.updateShownStatus()
+                    delay(20)
+                }.join()
+                binding.list.smoothScrollToPosition(0)
+            }
             it.visibility = View.GONE
         }
 

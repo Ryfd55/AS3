@@ -9,11 +9,12 @@ import ru.netology.nmedia3.Entity.PostEntity
 
 @Dao
 interface PostDao {
-    @Query("SELECT * FROM PostEntity ORDER BY id DESC")
+    @Query("SELECT * FROM PostEntity WHERE hidden = 0 ORDER BY id DESC")
     fun getAll(): Flow<List<PostEntity>>
 
-    @Query("SELECT * FROM PostEntity WHERE hidden = 1 ORDER BY id DESC")
-    fun getAllVisible(): Flow<List<PostEntity>>
+
+//    @Query("SELECT * FROM PostEntity WHERE hidden = 1 ORDER BY id DESC")
+//    fun getAllVisible(): Flow<List<PostEntity>>
 
     @Query("SELECT COUNT(*) == 0 FROM PostEntity")
     suspend fun isEmpty(): Boolean
