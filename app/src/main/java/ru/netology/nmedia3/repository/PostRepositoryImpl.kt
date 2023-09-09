@@ -24,10 +24,10 @@ class PostRepositoryImpl(
     private val newerPostsId = mutableListOf<Long>()
     override val data: Flow<List<Post>> = dao.getAll()
         .map {
-        it.filter { postEntity ->
-            !postEntity.hidden
+            it.filter { postEntity ->
+                !postEntity.hidden
+            }
         }
-    }
         .map(List<PostEntity>::toDto)
         .flowOn(Dispatchers.Default)
 
@@ -54,7 +54,7 @@ class PostRepositoryImpl(
                 throw ApiError(response.code(), response.message())
             }
             val body = response.body() ?: throw ApiError(response.code(), response.message())
-            for (i in body){
+            for (i in body) {
                 i.hidden = true
             }
             dao.insert(body.toEntity())
